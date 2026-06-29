@@ -99,13 +99,22 @@ class PathwayEngine:
                 optional_found = [g for g in optional if gene_vector.get(g, False)]
 
                 note = "Yolak AKTIF."
-                if optional_found:
-                    note += f" Opsiyonel genler de mevcut: {', '.join(optional_found)}"
+                confidence = "HIGH"
+                
+                if pathway_id == "beta":
+                    phaj_present = gene_vector.get("phaJ", False)
+                    confidence = "HIGH" if phaj_present else "MEDIUM"
+                    if not phaj_present:
+                        note += " phaJ bulunamadi — yag asidi substrat saglama kapasitesi belirsiz. Deneysel dogrulama onerilir."
+                else:
+                    if optional_found:
+                        note += f" Opsiyonel genler de mevcut: {', '.join(optional_found)}"
 
                 results.append({
                     "pathway_id": pathway_id,
                     "name": pdef["name"],
                     "active": True,
+                    "confidence": confidence,
                     "carbon_sources": pdef["carbon_sources"],
                     "product_tendency": pdef["product_tendency"],
                     "missing_genes": [],

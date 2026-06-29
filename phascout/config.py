@@ -31,17 +31,18 @@ PFAM_PROFILES = {
     "phaP": ["PF09361"],               # Phasin
     "phaR": ["PF07879"],               # Regulator (transkripsiyon düzenleyici)
     "phaE": ["PF09712"],               # PhaE (Class III alt birim)
+    "phaZ": ["PF05898"],               # PHA depolymerase
 }
 
 # ============================================================
 # BLOSUM62 NORMALİZE SKOR EŞİKLERİ (Aşama 0 Kalibrasyonu)
-# Bu değerler ROC/F1 analizi ile hesaplanmıştır.
+# Bu değerler min(qq, rr) normalizasyonu ile kalibre edilmiştir.
 # ============================================================
 BLOSUM62_THRESHOLDS = {
-    "phaB": 0.4778,  # F1 = 0.73 | Negatif: FabG + SDR broad
-    "phaA": 0.7435,  # F1 = 0.82 | Negatif: FadA
-    "phaG": 0.35,    # Henüz kalibre edilmedi (az veri), varsayılan
-    "phaJ": 0.35,    # Henüz kalibre edilmedi (az veri), varsayılan
+    "phaB": 0.8088,  # F1 = 0.500 | Negatif: FabG + SDR broad
+    "phaA": 0.4768,  # F1 = 0.857 | Negatif: FadA
+    "phaG": 0.0706,  # F1 = 1.000 (Az veri)
+    "phaJ": 0.3500,  # Negatif set henuz saglanmadigi icin varsayilan kaldi
 }
 
 # ============================================================
@@ -102,6 +103,7 @@ HEURISTIC_INDEX = {
     "monomer_partial_phaB_only": 10,
     "monomer_beta_no_phaJ": 30,
     "yield_phaP": 12,
+    "penalty_phaZ": 8,
     "max_score": 92,
 }
 

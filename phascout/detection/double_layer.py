@@ -73,17 +73,18 @@ class DoubleLayerFilter:
 
     def _normalized_score(self, query_seq: str, ref_seq: str) -> float:
         """
-        Normalize BLOSUM62 hizalama skoru hesapla.
-
-        Formül: Score(query, ref) / Score(ref, ref)
-        Sonuç 0-1 arasında olur.
+        Calculate length-independent normalized BLOSUM62 score.
+        Score = Score(Q, R) / min(Score(Q, Q), Score(R, R))
         """
         try:
             score_qr = self.aligner.score(query_seq, ref_seq)
+            score_qq = self.aligner.score(query_seq, query_seq)
             score_rr = self.aligner.score(ref_seq, ref_seq)
-            if score_rr == 0:
+            
+            denom = min(score_qq, score_rr)
+            if denom <= 0:
                 return 0.0
-            return score_qr / score_rr
+            return score_qr / denom
         except Exception as e:
             logger.debug(f"Hizalama hatası: {e}")
             return 0.0

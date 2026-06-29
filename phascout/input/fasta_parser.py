@@ -54,7 +54,20 @@ class FastaInput:
         instance.source = filepath
 
         try:
-            instance.records = list(SeqIO.parse(filepath, "fasta"))
+            raw_records = list(SeqIO.parse(filepath, "fasta"))
+            records = []
+            for rec in raw_records:
+                if not rec.seq: continue
+                seq_str = str(rec.seq).replace("*", "")
+                x_count = seq_str.count("X")
+                if len(seq_str) > 0 and (x_count / len(seq_str)) > 0.05:
+                    logger.warning(f"{rec.id} cok fazla belirsiz rezidu iceriyor (%{x_count/len(seq_str)*100:.1f} X), atlandi.")
+                    continue
+                seq_str = seq_str.replace("X", "")
+                if not seq_str: continue
+                rec.seq = rec.seq.__class__(seq_str)
+                records.append(rec)
+            instance.records = records
         except Exception as e:
             raise ValueError(f"FASTA ayrıştırma hatası: {e}")
 
@@ -89,7 +102,26 @@ class FastaInput:
         instance.source = "text_input"
 
         fasta_io = io.StringIO(fasta_text.strip())
-        instance.records = list(SeqIO.parse(fasta_io, "fasta"))
+        records = []
+        for rec in SeqIO.parse(fasta_io, "fasta"):
+            if not rec.seq:
+                continue
+
+            seq_str = str(rec.seq).replace("*", "")
+            
+            # X karakteri kontrolu
+            x_count = seq_str.count("X")
+            if len(seq_str) > 0 and (x_count / len(seq_str)) > 0.05:
+                logger.warning(f"{rec.id} cok fazla belirsiz rezidu iceriyor (%{x_count/len(seq_str)*100:.1f} X), atlandi.")
+                continue
+                
+            seq_str = seq_str.replace("X", "")
+            if not seq_str:
+                continue
+            
+            rec.seq = rec.seq.__class__(seq_str)
+            records.append(rec)
+        instance.records = records
 
         if not instance.records:
             raise ValueError(
