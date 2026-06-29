@@ -1,0 +1,33 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+ENV/
+.env
+
+# NCBI data downloads (Large files)
+ncbi_dataset/
+*.zip
+*.faa
+
+# Output logs and reports
+*.log
+*.txt
+results/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+
+# PyInstaller / Build
+build/
+dist/
+*.egg-info/
