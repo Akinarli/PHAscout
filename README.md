@@ -1,27 +1,22 @@
-# PHAscout 🔬🧬
-
-> A flawless, hyper-accurate, double-layer bioinformatics pipeline for discovering Polyhydroxyalkanoate (PHA) producing bacteria from raw NCBI RefSeq genomes.
+# PHAscout
 
 ![Python Version](https://img.shields.io/badge/python-3.10%2B-blue)
 ![Pylint](https://img.shields.io/badge/pylint-9.5%2F10-brightgreen)
-![Accuracy](https://img.shields.io/badge/accuracy-100%25-brightgreen)
-![Sensitivity](https://img.shields.io/badge/sensitivity-100%25-brightgreen)
-![Specificity](https://img.shields.io/badge/specificity-100%25-brightgreen)
 
-## 📌 Overview
-PHAscout is an autonomous bioinformatics pipeline engineered to scan bacterial genomes (via NCBI Accession codes) and confidently determine if the organism is capable of producing PHA (bioplastics). 
+## Overview
+PHAscout is an automated bioinformatics pipeline designed to detect Polyhydroxyalkanoate (PHA) biosynthesis potential in bacterial genomes (via NCBI Accession codes). 
 
-Unlike standard homology search tools that suffer from massive False Positives (e.g. confusing fatty-acid degradation lipases for PHA Synthases), **PHAscout uses a novel Double-Layer Validation architecture**:
-1. **Layer 1 (PyHMMER Profile Scanning):** Extracts candidate metabolic pathway genes (`phaA`, `phaB`, `phaC`, `phaJ`, `phaG`) using curated HMM profiles.
-2. **Layer 2 (BLOSUM62 Matched Matrix & Motif Validation):** Validates the candidates by structurally aligning them against highly-specific Reference Positives using BLOSUM62 matrices. Furthermore, it strictly enforces the presence of the `PhaC Catalytic Triad` (Cys-Asp-His) and the `PhaC Box Motif` ([GSY].C.[GSA]).
+The pipeline employs a two-stage validation process:
+1. **Profile HMM Scanning:** Extracts candidate metabolic pathway genes (`phaA`, `phaB`, `phaC`, `phaJ`, `phaG`) using curated HMM profiles from PFAM and custom alignments.
+2. **BLOSUM62-based Motif Verification:** Validates candidates by structurally aligning them against highly-specific reference sequences using the BLOSUM62 substitution matrix. It further enforces the presence of the strictly conserved `PhaC Catalytic Triad` (Cys-Asp-His) and the `PhaC Box Motif` ([GSY].C.[GSA]).
 
-## 🚀 Key Features
-- **Zero False Positives:** Specificity is scientifically validated at 100%. (Tested against *E. coli, M. tuberculosis, S. aureus* and other strict negatives).
-- **100% Accuracy on RefSeq Genomes:** Successfully captures Sınıf I, II, and III PHA producers like *C. necator*, *P. putida*, *A. caviae*, and *H. smyrnensis*.
-- **Autonomous API Integration:** Just provide a `GCF_` or `GCA_` accession code. The pipeline will automatically connect to the `NCBI Datasets API`, download the complete proteome, run the HMM scans, and generate a biological evaluation report.
-- **Heuristic Potential Index:** Calculates a custom score (0-92) to predict the industrial yield potential based on pathway completeness.
+## Repository Structure
+- `data/hmm_profiles/`: Contains the compiled `.hmm` profiles for PhaC subclasses and accessory genes (PFAM).
+- `data/reference_sequences/`: Curated `.fasta` files for True Positive (e.g. *Cupriavidus necator* PhaC) and True Negative (e.g. *E. coli* FadA) benchmarking.
+- `phascout/`: Core pipeline source code (Detection, Classification, Scoring).
+- `scripts/`: Training, calibration, and benchmarking scripts (including `run_final_20_test.py`).
 
-## 🛠️ Installation
+## Installation
 
 1. Clone the repository:
 ```bash
@@ -29,52 +24,30 @@ git clone https://github.com/Akinarli/PHAscout.git
 cd PHAscout
 ```
 
-2. Install the dependencies:
+2. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
-*(Note: Requires PyHMMER and Biopython).*
+*(Dependencies: pyhmmer, biopython, requests, scikit-learn)*
 
-## 💻 Usage
+## Usage
 
-Run the pipeline from your terminal by supplying a valid NCBI Accession code:
+Provide a valid NCBI Accession code (GCF_ / GCA_) to run the pipeline:
 
 ```bash
-python -m phascout.pipeline GCF_000219215.1
+python -m phascout.pipeline GCF_000007565.2
 ```
 
-### Expected Output Example:
-```text
-============================================================
-PHAscout ANALIZ RAPORU
-============================================================
+### Class II Classification Logic (e.g., Pseudomonas putida)
+PHAscout successfully classifies Medium-Chain-Length (MCL) PHA producers by evaluating alternative metabolic routes. For Class II synthases (like in *P. putida*), the pipeline explicitly searches for the `phaG` gene (3-hydroxyacyl-ACP:CoA transacylase), which diverts intermediates from *de novo* fatty acid biosynthesis towards MCL-PHA production. If `phaG` or `phaJ` is detected alongside a Class II `PhaC`, the algorithm assigns an Active Metabolic Pathway for MCL-PHA.
 
-Organizma: Cupriavidus necator N-1
-Accession: GCF_000219215.1
+## Benchmarking (Sanity Check)
+The pipeline was evaluated against an initial subset of 20 strictly verified RefSeq Complete Genomes (10 characterized PHA producers covering Classes I-III, and 10 characterized non-producers). 
 
-========================================
-SONUC
-========================================
-PHA Uretimi: EVET
-PHA Tipi: P(3HB)
-PhaC Sinifi: Class_I
-Sezgisel Indeks: 92/92 (Yuksek Potansiyel)
+* **True Positives (10/10):** Successfully identified structural genes and active pathways in known producers (e.g., *C. necator, P. putida, A. caviae, A. vinelandii*).
+* **True Negatives (10/10):** Successfully rejected homologous non-PHA enzymes (e.g., FabG, FadA lipases) in *E. coli, M. tuberculosis, S. aureus*.
 
-========================================
-TESPIT EDILEN GENLER
-========================================
-  [+] phaC: WP_011615085.1
-  [+] phaA: WP_011615087.1
-  [+] phaB: WP_011615086.1
-...
-```
+*(Note: This N=20 check serves as a primary functional validation of the BLOSUM62 thresholds; broader large-scale benchmarking is ongoing).*
 
-## 🧪 Scientific Validation
-This pipeline was aggressively benchmarked against 20 strictly verified organisms (10 True Positives, 10 True Negatives) using Gold Standard RefSeq Complete Genomes.
-* **TP:** 10/10
-* **TN:** 10/10
-* **FP:** 0/10
-* **FN:** 0/10
-
-## 📝 License
+## License
 MIT License.

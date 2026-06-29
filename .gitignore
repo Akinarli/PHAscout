@@ -17,6 +17,7 @@ ncbi_dataset/
 # Output logs and reports
 *.log
 *.txt
+!requirements.txt
 results/
 
 # OS generated files
