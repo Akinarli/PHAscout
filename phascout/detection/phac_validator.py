@@ -222,4 +222,13 @@ class PhaCValidator:
         result["is_functional"] = triad_res.get("is_functional", False)
         result["notes"].extend(triad_res.get("notes", []))
 
+        # 3. Dinamik guven (0-100): sinif HMM bit skoruna dayanir, triad/box
+        # eksikse dusurulur. Tipik gercek PhaC bit skoru ~600 -> ~100 guven.
+        conf = min(100.0, best_score / 6.0)
+        if not result["triad_found"]:
+            conf *= 0.5
+        if not result["box_found"]:
+            conf *= 0.7
+        result["confidence"] = round(conf, 1)
+
         return result

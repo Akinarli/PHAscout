@@ -1,0 +1,87 @@
+# Halomonas (Table 3) Keşif Sonuçları
+
+Toplam 74 genom başarıyla analiz edildi.
+
+## 🧬 SCL-co-MCL (Kopolimer) Potansiyeli Olanlar (1 Tür)
+Bu türlerin genomunda nadir bulunan kopolimer (MCL+SCL) enzim yolları tespit edildi:
+- *Halomonas alkalicola* (GCF_030505695.1)
+
+## 🧪 SCL (P3HB) Üreticileri (67 Tür)
+Bu türler klasik Class I PhaC ve SCL üretim yolaklarına tam olarak sahipler:
+- *Halomonas sabkhae* (GCF_030409265.1)
+- *Halomonas smyrnensis AAD6* (GCF_000265245.1)
+- *Halomonas lysinitropha* (GCF_902500215.1)
+- *Halomonas heilongjiangensis* (GCF_003202165.1)
+- *Halomonas marinisediminis* (GCF_004347715.1)
+- *Halomonas sp. H10-59* (GCF_040070555.1)
+- *Halomonas alkaliantarctica* (GCF_034479615.1)
+- *Halomonas halophila* (GCF_030406665.1)
+- *Halomonas qinghailakensis* (GCF_025820815.1)
+- *Halomonas cerina* (GCF_014192215.1)
+- *Halomonas huangheensis* (GCF_001431725.1)
+- *Halomonas alimentaria* (GCF_009902005.1)
+- *Halomonas aquatica* (GCF_040196335.1)
+- *Halomonas halmophila* (GCF_006540005.1)
+- *Halomonas salinarum* (GCF_012062845.1)
+- *Halomonas colorata* (GCF_014897985.1)
+- *Halomonas faecis* (GCF_010993975.1)
+- *Halomonas saccharevitans* (GCF_032333995.1)
+- *Halomonas tibetensis* (GCF_042643535.1)
+- *Halomonas getboli* (GCF_023094245.1)
+- *Halomonas eurihalina* (GCF_031451635.1)
+- *Halomonas socia* (GCF_010977575.1)
+- *Halomonas campaniensis* (GCF_014193375.1)
+- *Halomonas denitrificans* (GCF_003056305.1)
+- *Halomonas stenophila* (GCF_014192275.1)
+- *Halomonas citrativorans* (GCF_014898005.1)
+- *Halomonas fontilapidosi* (GCF_014192285.1)
+- *Halomonas icarae* (GCF_031451795.1)
+- *Halomonas ramblicola* (GCF_030409215.1)
+- *Halomonas kalidii* (GCF_030010475.1)
+- *Halomonas sp. RT37* (GCF_040070525.1)
+- *Halomonas chromatireducens* (GCF_001545155.1)
+- *Halomonas litopenaei* (GCF_003045775.1)
+- *Halomonas shengliensis* (GCF_900104135.1)
+- *Halomonas ventosae* (GCF_004363555.1)
+- *Halomonas gemina* (GCF_023554995.1)
+- *Halomonas korlensis* (GCF_900116705.1)
+- *Halomonas aestuarii* (GCF_001886615.1)
+- *Halomonas flagellata* (GCF_022487945.1)
+- *Halomonas hibernica* (GCF_013183775.1)
+- *Halomonas sp. PR-M31* (GCF_001039575.1)
+- *Halomonas elongata* (GCF_000196875.2)
+- *Halomonas maura* (GCF_030409305.1)
+- *Halomonas sp. BN3-1* (GCF_003056325.1)
+- *Halomonas jincaotanensis* (GCF_018448785.1)
+- *Halomonas casei* (GCF_050215505.1)
+- *Halomonas binhaiensis* (GCF_008329985.2)
+- *Halomonas beimenensis* (GCF_055382475.1)
+- *Halomonas alkalisoli* (GCF_021412585.1)
+- *Halomonas rhizosphaerae* (GCF_030012485.1)
+- *Halomonas dongshanensis* (GCF_024790395.1)
+- *Halomonas cupida* (GCF_900142755.1)
+- *Halomonas kashgarensis* (GCF_039691755.1)
+- *Halomonas urmiana* (GCF_005780185.1)
+- *Halomonas organivorans* (GCF_014192055.1)
+- *Halomonas sp. THAF12* (GCF_009363675.1)
+- *Halomonas llamarensis* (GCF_023555005.1)
+- *Halomonas pelophila* (GCF_040196315.1)
+- *Halomonas mongoliensis* (GCF_052496345.1)
+- *Halomonas daqiaonensis* (GCF_900109725.1)
+- *Halomonas nitroreducens* (GCF_003966155.1)
+- *Halomonas salipaludis* (GCF_002286975.1)
+- *Halomonas koreensis* (GCF_031451675.1)
+- *Halomonas qaidamensis* (GCF_025917315.1)
+- *Halomonas almeriensis* (GCF_030409235.1)
+- *Halomonas caseinilytica* (GCF_001662285.1)
+- *Halomonas urumqiensis* (GCF_003028575.1)
+
+## ❌ PHA Potansiyeli Olmayanlar / Belirsizler (6 Tür)
+Sen bu türlerde >%95 ANI ile PhaC bulmuş olabilirsin ancak PHAscout yapısal (katalitik triad) ve fonksiyonel olarak bunları **gerçek bir PHA sentazı OLMADIĞINA** karar verdi (Yüksek ihtimalle jenerik bir lipaz/hidrolaz veya kırık bir gen):
+- *Candidatus Halomonas stercoripullorum* (GCA_019114645.1) - *Büyük ihtimalle PHA üretmiyor, BLAST yaniltmacasi*
+- *Halomonas garicola* (GCF_055382465.1) - *Büyük ihtimalle PHA üretmiyor, BLAST yaniltmacasi*
+- *Halomonas cibimaris* (GCF_055379665.1) - *Büyük ihtimalle PHA üretmiyor, BLAST yaniltmacasi*
+- *Halomonas shantousis* (GCF_054654615.1) - *Büyük ihtimalle PHA üretmiyor, BLAST yaniltmacasi*
+- *Halomonas piscis* (GCF_031886125.1) - *Büyük ihtimalle PHA üretmiyor, BLAST yaniltmacasi*
+- *Halomonas borealis* (GCF_004798905.1) - *Büyük ihtimalle PHA üretmiyor, BLAST yaniltmacasi*
+

@@ -26,8 +26,10 @@ PFAM_PROFILES = {
     "phaC": ["PF07167", "PF00561"],   # Alpha/beta hydrolase + Abhydrolase
     "phaA": ["PF00108", "PF02803"],   # Thiolase N-term + C-term
     "phaB": ["PF13561"],               # adh_short_C2 (SDR ailesi)
-    "phaJ": ["PF00767"],               # Enoyl-CoA hydratase
-    "phaG": ["PF00121"],               # Acyltransferase
+    "phaJ": ["PF01575"],               # MaoC_dehydratas - (R)-spesifik enoyl-CoA hidrataz (hotdog katlanim).
+                                       # ESKI: PF00767 (crotonase) gercek PhaJ'in HICBIRINI yakalamiyordu;
+                                       # sadece fadB/echA gibi yanlis pozitifleri getiriyordu.
+    "phaG": ["PF00561", "PF07167"],               # Acyltransferase
     "phaP": ["PF09361"],               # Phasin
     "phaR": ["PF07879"],               # Regulator (transkripsiyon düzenleyici)
     "phaE": ["PF09712"],               # PhaE (Class III alt birim)
@@ -45,8 +47,8 @@ PFAM_PROFILES = {
 BLOSUM62_THRESHOLDS = {
     "phaB": 0.4899,  # F1 = 0.923 (n=7 pos / 40 neg: FabG + SDR broad). Eski kirli set: F1=0.50
     "phaA": 0.7161,  # F1 = 0.941 (n=9 pos / 96 neg: FadA)
-    "phaG": 0.5823,  # F1 = 1.000 (n=3 pos / 37 neg: FabG) - az veri
-    "phaJ": 0.4186,  # F1 = 1.000 (n=3 pos / 5 neg: crotonase ailesi) - cok az veri, dusuk guven
+    "phaG": 0.3500,  # Lowered from 0.5823 due to high diversity
+    "phaJ": 0.3500,  # Lowered from 0.4186 due to high diversity
 }
 
 # ============================================================
@@ -107,10 +109,14 @@ CATALYTIC_HMM_COLUMNS = {
 # kucuk bir pay sadece HMM build varyasyonlari icindir.
 TRIAD_TOLERANCE = 2
 
-# PhaC Box (lipase box) motifi: G-x-C-x-G-G ve varyantlari.
-# Box icindeki Cys, katalitik nukleofil ile AYNI kalinti olmalidir;
-# bu kosul validator'da hmm-kolon hizalamasiyla zorlanir.
-PHAC_BOX_REGEX = r"G.C.G[GA]"  # G-x-C-x-G-[G/A]: katalitik Cys nukleofil dirseginde
+# PhaC Box (lipase box) motifi: [G/A/S]-x-C-x-[G/A]-[G/A].
+# Kanonik kutu G-x-C-x-G-G'dir; ancak -2 pozisyonu dogal olarak degisir
+# (or. Halomonas'ta S-Y-C-V-G-G varyanti). TUM gercek PhaC'lerde korunan
+# cekirdek, katalitik Cys'i takip eden nukleofil dirsegi G-G'dir (C-x-[GA][GA]).
+# Box icindeki Cys, katalitik nukleofil ile AYNI kalinti olmalidir; bu kosul
+# validator'da hmm-kolon hizalamasiyla zorlanir. Triad zaten kesin katalitik
+# kolona kilitli oldugu icin box korroboratiftir.
+PHAC_BOX_REGEX = r"[GAS].C.[GA][GA]"  # [G/A/S]-x-C-x-[G/A]-[G/A]
 
 # ============================================================
 # CLASS III/IV ALT BİRİM KONTROL
@@ -118,22 +124,6 @@ PHAC_BOX_REGEX = r"G.C.G[GA]"  # G-x-C-x-G-[G/A]: katalitik Cys nukleofil dirseg
 SUBUNIT_PENALTY = {
     "full_score": 40,      # Alt birim tamam
     "missing_score": 15,   # Alt birim eksik (Polimeraz indeksi düşürülür)
-}
-
-# ============================================================
-# SEZGİSEL İNDEKS SABİTLERİ
-# ============================================================
-HEURISTIC_INDEX = {
-    "polymerase_full": 40,
-    "polymerase_no_subunit": 15,
-    "polymerase_none": 0,
-    "monomer_full": 40,
-    "monomer_partial_phaA_only": 10,
-    "monomer_partial_phaB_only": 10,
-    "monomer_beta_no_phaJ": 30,
-    "yield_phaP": 12,
-    "penalty_phaZ": 8,
-    "max_score": 92,
 }
 
 # ============================================================
@@ -175,5 +165,15 @@ PATHWAYS = {
         "valid_phac_classes": ["Class_I", "Class_III", "Class_IV"],
         "carbon_sources": ["glucose+propionate", "glucose+valerate"],
         "product_tendency": "P(3HB-co-3HV)",
+    },
+    "epsilon": {
+        # Yag asidi beta-oksidasyonundan PhaJ ((R)-spesifik enoyl-CoA hidrataz)
+        # araciligiyla PHA. Arketip: Aeromonas caviae -> P(3HB-co-3HHx).
+        # Kanonik phaA/phaB gerektirmez; monomerler beta-oksidasyondan gelir.
+        "name": "Yağ Asidinden PHA (β-oksidasyon / PhaJ rotası)",
+        "required_genes": ["phaC", "phaJ"],
+        "valid_phac_classes": ["Class_I", "Class_II", "Class_III"],
+        "carbon_sources": ["octanoate", "decanoate", "dodecanoate", "fatty_acids"],
+        "product_tendency": "SCL-co-MCL PHA (ör. P(3HB-co-3HHx))",
     },
 }

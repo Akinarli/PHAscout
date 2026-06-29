@@ -31,6 +31,7 @@ class ReportGenerator:
         pathway_results: list,
         heuristic_result: dict,
         carbon_recommendations: list = None,
+        pha_potential: dict = None,
     ) -> dict:
         """
         Tam rapor olustur.
@@ -45,10 +46,15 @@ class ReportGenerator:
         # Aktif yolaklar
         active_pathways = [pw for pw in pathway_results if pw["active"]]
 
-        # PHA uretim karari
-        produces_pha = (
-            phac_result.get("phac_confirmed", False) and len(active_pathways) > 0
-        )
+        # PHA TIPI POTANSIYELI (dürüst çerçeve). "Üretir mi EVET/HAYIR" damgası
+        # yerine gen-temelli bir potansiyel ifadesi. produces_pha yalnızca
+        # geriye uyumluluk için türetilmiş bir bool olarak korunur.
+        pha_potential = pha_potential or {"potential": "none", "products": [],
+                                          "routes": [], "confidence": "yok",
+                                          "gene_evidence": {}, "caveat": "", "notes": []}
+        # Yalnizca SOMUT tip iddialari pozitif sayilir; "belirsiz" (sentaz var,
+        # besleme rotasi yok) ve "none" pozitif degildir.
+        produces_pha = pha_potential.get("potential", "none") in ("SCL", "MCL", "SCL-co-MCL")
 
         report = {
             "meta": {
@@ -58,12 +64,19 @@ class ReportGenerator:
             },
             "organism": organism_info,
             "summary": {
-                "produces_pha": produces_pha,
-                "pha_type": active_pathways[0]["product_tendency"] if active_pathways else "N/A",
+                "pha_potential": pha_potential.get("potential", "none"),
+                "pha_products": pha_potential.get("products", []),
+                "potential_confidence": pha_potential.get("confidence", "yok"),
                 "phac_class": phac_result.get("best_class", "N/A"),
+                "phac_confidence": phac_result.get("confidence", 0.0),
                 "ml_probability": heuristic_result.get("ml_probability", 0.0),
                 "ml_model_loaded": heuristic_result.get("model_loaded", False),
+                "ml_corroborated": phac_result.get("ml_corroborated", None),
+                "subunit_ok": phac_result.get("subunit_ok", None),
+                # Geriye uyumluluk (smoke-test scriptleri): potansiyel != none
+                "produces_pha": produces_pha,
             },
+            "pha_potential": pha_potential,
             "genes": {
                 "detected": detected_genes,
                 "missing": missing_genes,
@@ -127,29 +140,47 @@ class ReportGenerator:
 
         # Ozet
         s = report["summary"]
+        pp = report.get("pha_potential", {})
         lines.append(f"\n{'=' * 40}")
-        lines.append("SONUC")
+        lines.append("PHA TIPI POTANSIYELI (gen-temelli)")
         lines.append(f"{'=' * 40}")
 
-        if s["produces_pha"]:
-            lines.append(f"PHA Uretimi: EVET")
-            lines.append(f"PHA Tipi: {s['pha_type']}")
+        pot = s.get("pha_potential", "none")
+        if pot == "none":
+            lines.append("PHA potansiyeli: YOK (fonksiyonel PhaC dogrulanamadi)")
+        elif pot == "belirsiz":
+            lines.append("PHA potansiyeli: BELIRSIZ (fonksiyonel PhaC var, besleme rotasi tespit edilemedi)")
         else:
-            lines.append(f"PHA Uretimi: HAYIR")
+            lines.append(f"PHA potansiyeli: {pot}  (guven: {s.get('potential_confidence', 'yok')})")
+            for prod in s.get("pha_products", []):
+                lines.append(f"  - {prod}")
+            for rt in pp.get("routes", []):
+                lines.append(f"  rota: {rt['name']} [{', '.join(rt['genes'])}] -> {rt['product']}")
 
-        lines.append(f"PhaC Sinifi: {s['phac_class']}")
+        lines.append(f"\nPhaC Sinifi: {s['phac_class']} (guven: {s.get('phac_confidence', 0.0)})")
         ml_src = "model" if s.get("ml_model_loaded") else "kural-tabanli yedek"
-        lines.append(f"ML Yardimci Guven: {s.get('ml_probability', 0.0)}% ({ml_src})")
+        corr = s.get("ml_corroborated")
+        corr_txt = "" if corr is None else (" [dogruladi]" if corr else " [DOGRULAMADI]")
+        lines.append(f"ML Yardimci Guven: {s.get('ml_probability', 0.0)}% ({ml_src}){corr_txt}")
+        if s.get("subunit_ok") is False:
+            lines.append("UYARI: Sinif icin gerekli alt birim (PhaE/PhaR) tespit edilmedi - sentaz suphesi.")
+        for note in pp.get("notes", []):
+            lines.append(f"NOT: {note}")
+        if pp.get("caveat"):
+            lines.append(f"\n[!] {pp['caveat']}")
 
         # Genler
         g = report["genes"]
         lines.append(f"\n{'=' * 40}")
         lines.append("TESPIT EDILEN GENLER")
         lines.append(f"{'=' * 40}")
+        ev = pp.get("gene_evidence", {})
         for gene in g["detected"]:
             detail = g["details"].get(gene, {})
             pid = detail.get("protein_id", "")
-            lines.append(f"  [+] {gene}: {pid}")
+            label = ev.get(gene)
+            extra = f" — {label}" if label and label not in ("tespit edildi",) else ""
+            lines.append(f"  [+] {gene}: {pid}{extra}")
         for gene in g["missing"]:
             lines.append(f"  [-] {gene}: Bulunamadi")
 

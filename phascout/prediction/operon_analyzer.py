@@ -1,79 +1,117 @@
 """
-Operon Analyzer Module
-======================
-Determines if PHA genes (phaC, phaA, phaB, etc.) are co-located within a single operon 
-by analyzing their genomic coordinates from GFF3 data.
+Operon / Synteni Kanıt Modülü
+==============================
+Seçilen (fonksiyonel) phaC'nin genomik komşuluğunu analiz ederek phaA/phaB
+gibi yardımcı genler için SINTENI kanıtı üretir.
+
+Biyolojik gerekçe: PhaB'yi FabG'den (ya da PhaA'yı diğer thiolazlardan) tek
+başına dizi benzerliğiyle ayırmak bir tavana sahiptir (her ikisi de aynı
+üst-aileden). En güvenilir genomik ayırt edici, genin phaC ile aynı operonda
+(birkaç kb içinde, aynı kontig) bulunmasıdır. Bu modül bunu iki amaçla kullanır:
+  1. KANIT ETİKETİ: bir yardımcı gen phaC ile sintenik mi? (operon-destekli vs aday)
+  2. KURTARMA: BLOSUM eşiğinin biraz altında kalan ama phaC ile SIKI sintenik
+     (operon içinde) bir aday, operon kanıtıyla onaylanabilir.
+
+Not: Operonu olmayan organizmalarda (ör. Class IV Bacillus, phaA/phaB operon-bağlı
+değildir) hiçbir gen kurtarılmaz — bu doğru ve dürüst davranıştır.
 """
 
-def analyze_operon(detected_genes: dict, gff_data: dict, max_distance_bp=3000) -> dict:
+OPERON_MAX_BP = 3500       # operon komşuluğu eşiği (kb mertebesinde sıkı)
+# Operon-kurtarma için minimum BLOSUM (gürültüyü ele; pipeline kullanır).
+RESCUE_BLOSUM_FLOOR = {
+    "phaA": 0.45,
+    "phaB": 0.35,
+}
+
+
+def _interval_distance(c1, c2):
+    """İki genomik özellik arasındaki minimum mesafe (bp). Farklı kontig -> inf."""
+    if not c1 or not c2:
+        return None
+    if c1["contig"] != c2["contig"]:
+        return float("inf")
+    if c1["end"] < c2["start"]:
+        return c2["start"] - c1["end"]
+    if c2["end"] < c1["start"]:
+        return c1["start"] - c2["end"]
+    return 0  # örtüşen
+
+
+def analyze_operon_evidence(phac_protein_id, raw_hmm_results, gff_data,
+                            max_distance_bp=OPERON_MAX_BP):
     """
-    Analyzes genomic distances between detected PHA genes.
-    
+    Seçilen phaC'ye göre phaA/phaB için en yakın sintenik adayı bulur.
+
     Args:
-        detected_genes: Dictionary of detected genes from hmm_scanner.
-                        Example: {"phaC": {"detected": True, "protein_id": "WP_123"}, ...}
-        gff_data: GFF3 coordinate dictionary from ncbi_datasets.
-        max_distance_bp: Maximum allowed distance between genes to be considered an operon.
-        
+        phac_protein_id: Seçilen (fonksiyonel) phaC protein_id'si.
+        raw_hmm_results: HMMScanner.scan() ham çıktısı (gen -> hit listesi).
+        gff_data: protein_id -> {contig, start, end, strand}.
+
     Returns:
-        dict: Operon analysis results containing distances and boolean flags.
+        dict: {
+          "available": bool,                # GFF + phaC koordinatı var mı
+          "phac_protein_id": str,
+          "is_class_i_operon": bool,        # phaA veya phaB phaC ile sintenik mi
+          "genes": {
+             gene: {"syntenic": bool, "distance": int|None, "protein_id": str|None}
+          }
+        }
     """
-    results = {
+    result = {
+        "available": False,
+        "phac_protein_id": phac_protein_id,
         "is_class_i_operon": False,
-        "distances": {}
+        "genes": {},
     }
-    
+
+    if not gff_data or not phac_protein_id:
+        return result
+    phac_coords = gff_data.get(phac_protein_id)
+    if not phac_coords:
+        return result
+    result["available"] = True
+
+    for gene in ("phaA", "phaB"):
+        best = {"syntenic": False, "distance": None, "protein_id": None}
+        seen = set()
+        for hit in raw_hmm_results.get(gene, []):
+            pid = hit.get("protein_id")
+            if not pid or pid in seen:
+                continue
+            seen.add(pid)
+            dist = _interval_distance(phac_coords, gff_data.get(pid))
+            if dist is None:
+                continue
+            if dist <= max_distance_bp and (best["distance"] is None or dist < best["distance"]):
+                best["distance"] = dist
+                best["protein_id"] = pid
+                best["syntenic"] = True
+        result["genes"][gene] = best
+        if best["syntenic"]:
+            result["is_class_i_operon"] = True
+
+    return result
+
+
+# Geriye uyumluluk: eski imza (yalnızca BLOSUM-onaylı genlerin sintenisi)
+def analyze_operon(detected_genes: dict, gff_data: dict, max_distance_bp=OPERON_MAX_BP) -> dict:
+    results = {"is_class_i_operon": False, "distances": {}}
     if not gff_data:
         return results
-        
-    def get_coords(gene_name):
-        gene_info = detected_genes.get(gene_name, {})
-        if gene_info.get("detected"):
-            prot_id = gene_info.get("protein_id")
-            if prot_id and prot_id in gff_data:
-                return gff_data[prot_id]
+
+    def coords(name):
+        gi = detected_genes.get(name, {})
+        if gi.get("detected"):
+            return gff_data.get(gi.get("protein_id"))
         return None
-        
-    phac_coords = get_coords("phaC")
-    phaa_coords = get_coords("phaA")
-    phab_coords = get_coords("phaB")
-    
-    if not phac_coords:
+
+    pc = coords("phaC")
+    if not pc:
         return results
-        
-    # Function to calculate min distance between two genomic features
-    def calc_dist(c1, c2):
-        if not c1 or not c2:
-            return None
-        if c1["contig"] != c2["contig"]:
-            return float('inf') # Different contigs
-            
-        # Distance is distance between intervals [start1, end1] and [start2, end2]
-        if c1["end"] < c2["start"]:
-            return c2["start"] - c1["end"]
-        elif c2["end"] < c1["start"]:
-            return c1["start"] - c2["end"]
-        else:
-            return 0 # Overlapping
-            
-    dist_c_a = calc_dist(phac_coords, phaa_coords)
-    dist_c_b = calc_dist(phac_coords, phab_coords)
-    
-    if dist_c_a is not None:
-        results["distances"]["phaC-phaA"] = dist_c_a
-    if dist_c_b is not None:
-        results["distances"]["phaC-phaB"] = dist_c_b
-        
-    # Operon Logic for Class I: phaC is physically close to phaA and/or phaB
-    # Cupriavidus necator H16 has phaCAB operon.
-    # If phaC is within max_distance of phaA OR phaB, we consider it an operon context.
-    
-    operon_found = False
-    if dist_c_a is not None and dist_c_a <= max_distance_bp:
-        operon_found = True
-    if dist_c_b is not None and dist_c_b <= max_distance_bp:
-        operon_found = True
-        
-    results["is_class_i_operon"] = operon_found
-    
+    for g in ("phaA", "phaB"):
+        d = _interval_distance(pc, coords(g))
+        if d is not None:
+            results["distances"][f"phaC-{g}"] = d
+            if d <= max_distance_bp:
+                results["is_class_i_operon"] = True
     return results

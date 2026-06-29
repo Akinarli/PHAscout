@@ -1,0 +1,10 @@
+﻿Accession,Species,Expected_Type,Expected_Class,Notes
+GCF_000265245.1,Halomonas smyrnensis AAD6,SCL,Class_I,SCL ureticisi
+GCF_030704205.1,Halomonas alkalicola EXT,SCL,Class_I,SCL ureticisi (PHBV potansiyelli)
+GCF_900142755.1,Halomonas cupida J9,SCL-co-MCL,Class_I,Farkli calismalarda MCL kopolimer raporlanmis
+GCA_000009285.2,Cupriavidus necator H16,SCL,Class_I,Model SCL ureticisi
+GCF_000007565.2,Pseudomonas putida KT2440,MCL,Class_II,Model MCL ureticisi
+GCF_000005845.2,Escherichia coli K-12,None,None,PHA uretmez (Tuzak Negatif)
+GCF_000013425.1,Staphylococcus aureus,None,None,PHA uretmez (Tuzak Negatif)
+GCA_029537015.2,Bacillus megaterium DSM 319,SCL,Class_IV,Model Class IV ureticisi
+GCF_900476005.1,Aeromonas caviae,SCL-co-MCL,Class_I,SCL-co-MCL ureticisi (PhaJ uzerinden)

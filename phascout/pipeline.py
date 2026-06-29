@@ -138,44 +138,105 @@ class PHAscoutPipeline:
             "all_scores": {},
         }
 
+        phac_seq = ""
         if gene_vector["phaC"]:
             phac_hits = filtered_results.get("phaC", [])
-            if phac_hits:
-                best_phac = phac_hits[0]
-                phac_seq = best_phac.get("sequence", "")
-                if phac_seq:
-                    phac_result = self.phac_validator.full_analysis(phac_seq)
-                    logger.info(f"PhaC sinifi: {phac_result['best_class']}")
-                    logger.info(f"PhaC fonksiyonel: {phac_result['is_functional']}")
+            # KRITIK: Katman 1 (genis PFAM agi) yuzlerce alpha/beta-hidrolazi
+            # yakalar ve jenerik hidrolazlar gercek PhaC'ten DAHA IYI E-value
+            # alabilir. Bu yuzden sadece phac_hits[0]'a bakmak gercek PhaC'i
+            # kacirir (sessiz yanlis negatif). Tum adaylari dogrulayip,
+            # ONAYLANAN (phac_confirmed) ve EN YUKSEK skorlu olani seceriz;
+            # fonksiyonel (triad+box) olanlar onceliklidir.
+            # Coklu-sentaz genomlarinda (or. C. necator H16'da Class I PhaC +
+            # ikinci bir sentaz-homologu) ham bit-skoru farkli sinif HMM'leri
+            # arasinda kiyaslanamaz. Bu yuzden secimde biyolojik baglami
+            # kullaniriz: organizmanin GERCEKTEN kullanabilecegi, yani besleme
+            # ROTASI tam olan sentazi tercih ederiz (Class I PhaC phaA/phaB
+            # operonunda; yetim bir Class II ORF'una gore onceliklidir).
+            def _route_complete(cls):
+                if cls == "Class_II":
+                    return gene_vector.get("phaG") or gene_vector.get("phaJ")
+                return (gene_vector.get("phaA") and gene_vector.get("phaB")) or gene_vector.get("phaJ")
+
+            best_phac_hit = None
+            best_rank = (-1, -1, -1.0)  # (is_functional, route_complete, best_score)
+            n_candidates = len(phac_hits)
+            for hit in phac_hits:
+                seq = hit.get("sequence", "")
+                if not seq:
+                    continue
+                cand = self.phac_validator.full_analysis(seq)
+                if not cand.get("phac_confirmed"):
+                    continue
+                rank = (
+                    1 if cand.get("is_functional") else 0,
+                    1 if _route_complete(cand.get("best_class")) else 0,
+                    cand.get("best_score", 0.0),
+                )
+                if rank > best_rank:
+                    best_rank = rank
+                    phac_result = cand
+                    best_phac_hit = hit
+                    phac_seq = seq
+
+            if best_phac_hit is not None:
+                # Secilen gercek PhaC'i listenin basina al ki rapor/operon
+                # dogru proteini gostersin (jenerik hidrolazi degil).
+                filtered_results["phaC"].remove(best_phac_hit)
+                filtered_results["phaC"].insert(0, best_phac_hit)
+                logger.info(
+                    f"PhaC: {n_candidates} aday tarandi, secilen {best_phac_hit['protein_id']} "
+                    f"-> sinif={phac_result['best_class']}, fonksiyonel={phac_result['is_functional']}"
+                )
+            else:
+                logger.info(f"PhaC: {n_candidates} aday taranadi, hicbiri PhaC olarak onaylanmadi.")
 
         # =======================================
-        # ADIM 5.5: OPERON ANALIZI
+        # ADIM 5.5: OPERON / SINTENI KANITI (birinci-sinif kanit)
         # =======================================
         logger.info("=" * 50)
-        logger.info("ADIM 5.5: Operon analizi...")
-        
-        detected_genes_dict = {}
-        for g, hits in filtered_results.items():
-            if hits:
-                detected_genes_dict[g] = {"detected": True, "protein_id": hits[0]["protein_id"]}
-            else:
-                detected_genes_dict[g] = {"detected": False}
-                
-        from phascout.prediction.operon_analyzer import analyze_operon
-        operon_result = analyze_operon(detected_genes_dict, self.gff_data if hasattr(self, 'gff_data') else {})
+        logger.info("ADIM 5.5: Operon/sinteni analizi...")
 
-        # Operon kaniti SINIFLANDIRMAYI DEGISTIRMEZ. Sinif, katalitik HMM
-        # skorlari ve triad ile belirlenir; sinteni (phaC-phaA-phaB yakinligi)
-        # ayri bir kanit olarak yalnizca NOT olarak raporlanir. (Class IV
-        # gercek bir katalitik siniftir ve operonik olabilir; sinteniyi sinifla
-        # karistirmak hatalidir.)
+        from phascout.prediction.operon_analyzer import (
+            analyze_operon_evidence, RESCUE_BLOSUM_FLOOR,
+        )
+        gff = self.gff_data if hasattr(self, "gff_data") else {}
+        phac_pid = best_phac_hit["protein_id"] if 'best_phac_hit' in locals() and best_phac_hit else None
+        operon_result = analyze_operon_evidence(phac_pid, hmm_results, gff)
+
+        # OPERON-KURTARMA: BLOSUM esigini gecememis ama secilen phaC ile SIKI
+        # sintenik (operon icinde) bir phaA/phaB adayi, sinteni kanitiyla onaylanir.
+        # Biyolojik gerekce: operon icindeki bir thiolaz/SDR neredeyse kesin
+        # PhaA/PhaB'dir (FabG fatty-acid operonundadir, phaC'nin yaninda degil).
+        # Operonu olmayan organizmalarda (Class IV Bacillus) hicbir sey kurtarilmaz.
+        operon_result["rescued"] = {}
+        for gene in ("phaA", "phaB"):
+            gev = operon_result.get("genes", {}).get(gene, {})
+            if gene_vector.get(gene) or not gev.get("syntenic"):
+                continue
+            cand_pid = gev.get("protein_id")
+            cand_hit = next((h for h in hmm_results.get(gene, []) if h["protein_id"] == cand_pid), None)
+            if not cand_hit:
+                continue
+            bl = self.double_layer._max_score_against_refs(cand_hit.get("sequence", ""), gene)
+            if bl >= RESCUE_BLOSUM_FLOOR.get(gene, 0.4):
+                cand_hit = dict(cand_hit)
+                cand_hit["verified"] = True
+                cand_hit["blosum_score"] = round(bl, 4)
+                cand_hit["filter_note"] = (
+                    f"OPERON-KURTARMA: BLOSUM {bl:.3f} (esik alti) ama phaC ile "
+                    f"{gev['distance']} bp sintenik -> operon kaniti ile onaylandi."
+                )
+                filtered_results.setdefault(gene, []).insert(0, cand_hit)
+                gene_vector[gene] = True
+                operon_result["rescued"][gene] = {"protein_id": cand_pid, "distance": gev["distance"], "blosum": round(bl, 4)}
+                logger.info(f"  {gene} OPERON-KURTARMA: {cand_pid} ({gev['distance']} bp, BLOSUM {bl:.3f})")
+
+        # Sinteni SINIFLANDIRMAYI DEGISTIRMEZ; yalnizca kanit/etiket uretir.
         if operon_result.get("is_class_i_operon"):
-            logger.info("Operon kaniti: phaC-phaA-phaB yakinligi tespit edildi (sinif degismez).")
-            operon_result["note"] = (
-                "Sinteni kaniti: phaC, phaA/phaB ile operonik yakinlikta "
-                "(SCL-PHA yolagi icin destekleyici, siniflandirmadan bagimsiz)."
+            phac_result.setdefault("notes", []).append(
+                "Sinteni kaniti: phaC, phaA/phaB ile operonik yakinlikta (PhaB↔FabG ayrimi icin destekleyici)."
             )
-            phac_result.setdefault("notes", []).append(operon_result["note"])
 
         phac_class = phac_result.get("best_class")
 
@@ -205,8 +266,43 @@ class PHAscoutPipeline:
         logger.info("ADIM 8: ML Biyolojik Olasilik hesaplaniyor...")
 
         ml_result = self.ml_scorer.predict(
-            phac_result, gene_vector, operon_result, phac_seq if 'phac_seq' in locals() else None
+            phac_result, gene_vector, operon_result, phac_seq
         )
+
+        # =======================================
+        # ADIM 8.5: GUVEN + ALT BIRIM ENTEGRASYONU
+        # =======================================
+        # Karar (produces_pha) DETERMINISTIK kalir: fonksiyonel PhaC (triad+box)
+        # + aktif yolak. ML ve alt birim, GUVENI ayarlar ve uyari uretir; ML
+        # yapisal triad kanitini GECERSIZ KILMAZ (kara kutu, deterministik
+        # katalitik kanittan daha zayif bir kanittir).
+        if phac_result.get("phac_confirmed"):
+            # Alt birim eksikse Class III/IV icin guven dusur + uyari
+            if subunit_result.get("subunit_required") and not subunit_result.get("subunit_found"):
+                phac_result["confidence"] = round(phac_result.get("confidence", 0.0) * 0.6, 1)
+                warn = (
+                    f"UYARI: {phac_class} sentazi {subunit_result.get('subunit_name')} "
+                    f"alt birimi gerektirir ancak tespit edilmedi; aktif sentaz suphelidir."
+                )
+                phac_result.setdefault("notes", []).append(warn)
+                phac_result["subunit_ok"] = False
+            else:
+                phac_result["subunit_ok"] = True
+
+            # ML korroborasyonu (deterministik karari gecersiz kilmaz, sadece raporlanir)
+            ml_p = ml_result.get("ml_probability", 0.0)
+            phac_result["ml_corroborated"] = bool(ml_p >= 50.0)
+            if phac_result.get("is_functional") and not phac_result["ml_corroborated"]:
+                phac_result.setdefault("notes", []).append(
+                    f"NOT: Fonksiyonel triad bulundu ancak ML guveni dusuk ({ml_p}%) - elle gozden gecirilebilir."
+                )
+
+        # =======================================
+        # ADIM 8.7: PHA TIPI POTANSIYELI (yorum)
+        # =======================================
+        from phascout.prediction.pha_type import classify_pha_potential
+        pha_potential = classify_pha_potential(phac_result, gene_vector, operon_result)
+        logger.info(f"PHA tipi potansiyeli: {pha_potential['potential']} (guven: {pha_potential['confidence']})")
 
         # =======================================
         # ADIM 9: RAPOR URETIMI
@@ -223,6 +319,7 @@ class PHAscoutPipeline:
             pathway_results=pathway_results,
             heuristic_result=ml_result, # Use ml_result here to avoid rewriting reporter immediately
             carbon_recommendations=carbon_recs,
+            pha_potential=pha_potential,
         )
 
         logger.info("=" * 50)

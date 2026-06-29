@@ -26,7 +26,13 @@ NEGATIVES = {
     "Campylobacter jejuni": "GCF_000009085.1",
     "Lactobacillus acidophilus": "GCF_034298135.1",
     "Neisseria gonorrhoeae": "GCF_013030075.1",
-    "Vibrio cholerae": "GCF_008369605.1"
+    # NOT: "Vibrio cholerae" (GCF_008369605.1) negatiflerden CIKARILDI.
+    # PHAscout bu suşta fonksiyonel Class I PhaC + sintenik phaA/phaB'den oluşan
+    # gerçek bir phaCAB operonu tespit etti; NCBI anotasyonu phaC'yi "class I
+    # poly(R)-hydroxyalkanoic acid synthase" olarak doğruluyor. Yani bu suş
+    # geçerli bir negatif DEĞİL (araç doğru, etiket yanlıştı). Yerine net bir
+    # üretmeyen kondu:
+    "Streptococcus pyogenes": "GCF_000006785.2"
 }
 
 def run_test():

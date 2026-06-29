@@ -1,0 +1,91 @@
+﻿Accession,Species,Expected_Type,Expected_Class,Notes
+GCA_008801925.2,Cupriavidus basilensis,SCL,Unknown,Cupriavidus SCL producer
+GCA_002011925.2,Cupriavidus necator,SCL,Unknown,Cupriavidus SCL producer
+GCF_013347325.1,Cupriavidus gilardii,SCL,Unknown,Cupriavidus SCL producer
+GCA_001854325.1,Cupriavidus malaysiensis,SCL,Unknown,Cupriavidus SCL producer
+GCF_008801925.2,Cupriavidus basilensis,SCL,Unknown,Cupriavidus SCL producer
+GCF_002011925.2,Cupriavidus necator,SCL,Unknown,Cupriavidus SCL producer
+GCF_026210475.1,Cupriavidus cauae,SCL,Unknown,Cupriavidus SCL producer
+GCA_019931045.1,Cupriavidus pauculus,SCL,Unknown,Cupriavidus SCL producer
+GCF_001854325.1,Cupriavidus malaysiensis,SCL,Unknown,Cupriavidus SCL producer
+GCA_000219215.1,Cupriavidus necator N-1,SCL,Unknown,Cupriavidus SCL producer
+GCA_008329985.2,Halomonas binhaiensis,SCL,Unknown,Halomonas SCL producer
+GCA_001431725.1,Halomonas huangheensis,SCL,Unknown,Halomonas SCL producer
+GCF_055382475.1,Halomonas beimenensis,SCL,Unknown,Halomonas SCL producer
+GCA_030406665.1,Halomonas halophila,SCL,Unknown,Halomonas SCL producer
+GCF_000196875.2,Halomonas elongata DSM 2581,SCL,Unknown,Halomonas SCL producer
+GCA_025820815.1,Halomonas qinghailakensis,SCL,Unknown,Halomonas SCL producer
+GCF_001431725.1,Halomonas huangheensis,SCL,Unknown,Halomonas SCL producer
+GCA_031886125.1,Halomonas piscis,SCL,Unknown,Halomonas SCL producer
+GCA_001886615.1,Halomonas aestuarii,SCL,Unknown,Halomonas SCL producer
+GCF_008329985.2,Halomonas binhaiensis,SCL,Unknown,Halomonas SCL producer
+GCA_036687365.1,Azotobacter vinelandii DJ,SCL,Unknown,Azotobacter SCL producer
+GCA_030506185.2,Azotobacter vinelandii,SCL,Unknown,Azotobacter SCL producer
+GCF_002220155.1,Azotobacter chroococcum,SCL,Unknown,Azotobacter SCL producer
+GCA_036687375.1,Azotobacter vinelandii DJ,SCL,Unknown,Azotobacter SCL producer
+GCA_016406165.1,Azotobacter chroococcum,SCL,Unknown,Azotobacter SCL producer
+GCF_008275125.1,Chromobacterium paludis,SCL,Unknown,Chromobacterium SCL producer
+GCA_009936155.1,Chromobacterium haemolyticum,SCL,Unknown,Chromobacterium SCL producer
+GCA_001855275.1,Chromobacterium vaccinii,SCL,Unknown,Chromobacterium SCL producer
+GCF_009936155.1,Chromobacterium haemolyticum,SCL,Unknown,Chromobacterium SCL producer
+GCF_003325475.1,Chromobacterium phragmitis,SCL,Unknown,Chromobacterium SCL producer
+GCA_012767755.2,Pseudomonas tohonis,MCL,Unknown,Pseudomonas MCL producer
+GCF_052907105.1,Pseudomonas plecoglossicida,MCL,Unknown,Pseudomonas MCL producer
+GCA_901482615.1,Pseudomonas synxantha,MCL,Unknown,Pseudomonas MCL producer
+GCF_014268495.2,Pseudomonas monsensis,MCL,Unknown,Pseudomonas MCL producer
+GCF_012767755.2,Pseudomonas tohonis,MCL,Unknown,Pseudomonas MCL producer
+GCA_014268495.2,Pseudomonas monsensis,MCL,Unknown,Pseudomonas MCL producer
+GCA_052907105.1,Pseudomonas plecoglossicida,MCL,Unknown,Pseudomonas MCL producer
+GCF_900560965.1,Pseudomonas protegens CHA0,MCL,Unknown,Pseudomonas MCL producer
+GCA_000007805.1,Pseudomonas syringae pv. tomato str. DC3000,MCL,Unknown,Pseudomonas MCL producer
+GCF_901482615.1,Pseudomonas synxantha,MCL,Unknown,Pseudomonas MCL producer
+GCF_000007805.1,Pseudomonas syringae pv. tomato str. DC3000,MCL,Unknown,Pseudomonas MCL producer
+GCA_000412675.1,Pseudomonas putida NBRC 14164,MCL,Unknown,Pseudomonas MCL producer
+GCA_000026105.1,Pseudomonas entomophila L48,MCL,Unknown,Pseudomonas MCL producer
+GCF_036689615.1,Pseudomonas chlororaphis subsp. chlororaphis,MCL,Unknown,Pseudomonas MCL producer
+GCF_000026105.1,Pseudomonas entomophila L48,MCL,Unknown,Pseudomonas MCL producer
+GCA_036689615.1,Pseudomonas chlororaphis subsp. chlororaphis,MCL,Unknown,Pseudomonas MCL producer
+GCF_000412675.1,Pseudomonas putida NBRC 14164,MCL,Unknown,Pseudomonas MCL producer
+GCF_018343775.1,Pseudomonas cichorii,MCL,Unknown,Pseudomonas MCL producer
+GCA_018343775.1,Pseudomonas cichorii,MCL,Unknown,Pseudomonas MCL producer
+GCA_900560965.1,Pseudomonas protegens CHA0,MCL,Unknown,Pseudomonas MCL producer
+GCF_028355655.1,Aeromonas salmonicida,SCL-co-MCL,Unknown,Aeromonas SCL-co-MCL producer
+GCA_044336385.1,Aeromonas mytilicola subsp. aquatica,SCL-co-MCL,Unknown,Aeromonas SCL-co-MCL producer
+GCF_008693705.1,Aeromonas veronii,SCL-co-MCL,Unknown,Aeromonas SCL-co-MCL producer
+GCA_028355655.1,Aeromonas salmonicida,SCL-co-MCL,Unknown,Aeromonas SCL-co-MCL producer
+GCF_002285935.1,Aeromonas dhakensis,SCL-co-MCL,Unknown,Aeromonas SCL-co-MCL producer
+GCA_900476005.1,Aeromonas caviae,SCL-co-MCL,Unknown,Aeromonas SCL-co-MCL producer
+GCF_020097295.1,Aeromonas enteropelogenes,SCL-co-MCL,Unknown,Aeromonas SCL-co-MCL producer
+GCA_008693705.1,Aeromonas veronii,SCL-co-MCL,Unknown,Aeromonas SCL-co-MCL producer
+GCF_049665575.1,Aeromonas oralensis,SCL-co-MCL,Unknown,Aeromonas SCL-co-MCL producer
+GCA_049665575.2,Aeromonas oralensis,SCL-co-MCL,Unknown,Aeromonas SCL-co-MCL producer
+GCA_029962465.1,Escherichia marmotae,None,Unknown,Escherichia None producer
+GCA_002853715.1,Escherichia coli,None,Unknown,Escherichia None producer
+GCF_000010385.1,Escherichia coli SE11,None,Unknown,Escherichia None producer
+GCA_028622335.1,Escherichia albertii,None,Unknown,Escherichia None producer
+GCA_000005845.2,Escherichia coli str. K-12 substr. MG1655,None,Unknown,Escherichia None producer
+GCF_028622335.1,Escherichia albertii,None,Unknown,Escherichia None producer
+GCA_000210475.1,Escherichia coli ETEC H10407,None,Unknown,Escherichia None producer
+GCF_029962465.1,Escherichia marmotae,None,Unknown,Escherichia None producer
+GCA_003697165.2,Escherichia coli DSM 30083 = JCM 1649 = ATCC 11775,None,Unknown,Escherichia None producer
+GCF_002853715.1,Escherichia coli,None,Unknown,Escherichia None producer
+GCA_000236925.1,Staphylococcus argenteus,None,Unknown,Staphylococcus None producer
+GCA_900637235.1,Staphylococcus condimenti,None,Unknown,Staphylococcus None producer
+GCA_003012915.1,Staphylococcus felis,None,Unknown,Staphylococcus None producer
+GCF_006094375.1,Staphylococcus epidermidis,None,Unknown,Staphylococcus None producer
+GCF_900637235.1,Staphylococcus condimenti,None,Unknown,Staphylococcus None producer
+GCA_040739365.1,Staphylococcus capitis subsp. urealyticus,None,Unknown,Staphylococcus None producer
+GCA_006094395.1,Staphylococcus haemolyticus,None,Unknown,Staphylococcus None producer
+GCF_000816085.1,Staphylococcus hyicus,None,Unknown,Staphylococcus None producer
+GCF_003012915.1,Staphylococcus felis,None,Unknown,Staphylococcus None producer
+GCF_006094395.1,Staphylococcus haemolyticus,None,Unknown,Staphylococcus None producer
+GCF_000582515.1,Yersinia similis,None,Unknown,Yersinia None producer
+GCF_009831415.1,Yersinia canariae,None,Unknown,Yersinia None producer
+GCF_004124235.1,Yersinia hibernica,None,Unknown,Yersinia None producer
+GCA_009831415.1,Yersinia canariae,None,Unknown,Yersinia None producer
+GCA_017498685.1,Yersinia ruckeri,None,Unknown,Yersinia None producer
+GCA_900637025.1,Streptococcus oralis ATCC 35037,None,Unknown,Streptococcus None producer
+GCF_019048645.1,Streptococcus mutans,None,Unknown,Streptococcus None producer
+GCF_900475975.1,Streptococcus intermedius,None,Unknown,Streptococcus None producer
+GCA_016725005.1,Streptococcus constellatus,None,Unknown,Streptococcus None producer
+GCA_019046945.1,Streptococcus gordonii,None,Unknown,Streptococcus None producer
