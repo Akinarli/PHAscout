@@ -123,6 +123,82 @@ def fetch_proteome(accession: str, output_dir: str = None) -> list:
     return records
 
 
+def fetch_proteome_and_gff(accession: str) -> tuple:
+    accession = accession.strip()
+    if not (accession.startswith("GCF_") or accession.startswith("GCA_")):
+        raise ValueError(f"Geçersiz accession: '{accession}'. GCF_ veya GCA_ ile başlamalıdır.")
+
+    logger.info(f"NCBI'dan proteom ve GFF3 indiriliyor: {accession}")
+
+    url = (
+        f"{NCBI_DATASETS_BASE_URL}/genome/accession/{accession}/download"
+        f"?include_annotation_type=PROT_FASTA,GENOME_GFF"
+    )
+
+    headers = {"Accept": "application/zip"}
+    if NCBI_API_KEY:
+        headers["api-key"] = NCBI_API_KEY
+
+    try:
+        response = requests.get(url, headers=headers, timeout=NCBI_TIMEOUT, stream=True)
+        response.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        raise ConnectionError(f"NCBI API hatası: {e}")
+
+    zip_data = io.BytesIO(response.content)
+    records = []
+    gff_data = {}
+
+    try:
+        with zipfile.ZipFile(zip_data) as zf:
+            protein_file = None
+            gff_file = None
+            for name in zf.namelist():
+                if name.endswith("protein.faa"):
+                    protein_file = name
+                elif name.endswith("genomic.gff"):
+                    gff_file = name
+
+            if protein_file:
+                with zf.open(protein_file) as fasta_handle:
+                    fasta_text = fasta_handle.read().decode("utf-8")
+                    records = list(SeqIO.parse(io.StringIO(fasta_text), "fasta"))
+                    
+            if gff_file:
+                with zf.open(gff_file) as gff_handle:
+                    for line in gff_handle:
+                        line = line.decode("utf-8")
+                        if line.startswith("#"):
+                            continue
+                        parts = line.strip().split("\t")
+                        if len(parts) >= 9 and parts[2] == "CDS":
+                            contig = parts[0]
+                            start = int(parts[3])
+                            end = int(parts[4])
+                            strand = parts[6]
+                            attributes = parts[8]
+                            
+                            prot_id = None
+                            for attr in attributes.split(";"):
+                                if attr.startswith("protein_id="):
+                                    prot_id = attr.split("=")[1]
+                                    break
+                                elif attr.startswith("Name=WP_") or attr.startswith("Name=NP_"):
+                                    prot_id = attr.split("=")[1]
+                                    
+                            if prot_id:
+                                gff_data[prot_id] = {
+                                    "contig": contig,
+                                    "start": start,
+                                    "end": end,
+                                    "strand": strand
+                                }
+    except zipfile.BadZipFile:
+        raise ConnectionError("NCBI'dan gelen veri bozuk (Bad Zip).")
+
+    return records, gff_data
+
+
 def get_organism_info(accession: str) -> dict:
     """
     NCBI Datasets API v2 ile verilen assembly accession'dan

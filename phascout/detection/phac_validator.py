@@ -116,5 +116,60 @@ class PhaCValidator:
         result["is_functional"] = result["triad_found"] and result["box_found"]
         return result
 
-    def full_analysis(self, sequence: str, phac_class: str = "Class_I") -> dict:
-        return self.validate_triad_hmm(sequence, phac_class)
+    def full_analysis(self, sequence: str) -> dict:
+        result = {
+            "phac_confirmed": False,
+            "best_class": "Unknown",
+            "best_score": 0.0,
+            "confidence": 0.0,
+            "triad_found": False,
+            "box_found": False,
+            "is_functional": False,
+            "notes": [],
+            "all_scores": {}
+        }
+        
+        seq_clean = sequence.replace("*", "").replace("X", "A")
+        
+        try:
+            digital_seq = pyhmmer.easel.TextSequence(
+                name=b"query", sequence=seq_clean
+            ).digitize(self.alphabet)
+        except Exception:
+            return result
+            
+        # 1. HMM tabanli siniflandirma
+        best_score = 0
+        best_class = "Unknown"
+        
+        for cls, hmm in self.class_hmms.items():
+            try:
+                hits = list(pyhmmer.hmmsearch([hmm], [digital_seq], background=self.background))
+                if hits and len(hits[0]) > 0:
+                    score = hits[0][0].score
+                    result["all_scores"][cls] = score
+                    if score > best_score and score > 20: # Minimum cutoff
+                        best_score = score
+                        best_class = cls
+            except Exception:
+                pass
+                
+        result["best_class"] = best_class
+        result["best_score"] = best_score
+        
+        if best_class == "Unknown":
+            result["notes"].append("Hicbir PhaC sinifina uygun degil.")
+            return result
+            
+        result["phac_confirmed"] = True
+        
+        # 2. Triad dogrulama
+        triad_res = self.validate_triad_hmm(sequence, best_class)
+        result["triad_found"] = triad_res.get("triad_found", False)
+        result["triad_residues"] = triad_res.get("triad_residues", {})
+        result["box_found"] = triad_res.get("box_found", False)
+        result["box_match"] = triad_res.get("box_match")
+        result["is_functional"] = triad_res.get("is_functional", False)
+        result["notes"].extend(triad_res.get("notes", []))
+        
+        return result

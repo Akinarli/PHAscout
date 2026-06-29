@@ -19,7 +19,7 @@ from phascout.detection.double_layer import DoubleLayerFilter
 from phascout.detection.phac_validator import PhaCValidator
 from phascout.classification.subunit_checker import SubunitChecker
 from phascout.prediction.pathway_engine import PathwayEngine
-from phascout.scoring.heuristic_index import HeuristicIndex
+from phascout.scoring.ml_scorer import MLScorer
 from phascout.reporting.report_generator import ReportGenerator
 
 logger = logging.getLogger(__name__)
@@ -38,7 +38,7 @@ class PHAscoutPipeline:
         self.phac_validator = PhaCValidator()
         self.subunit_checker = SubunitChecker()
         self.pathway_engine = PathwayEngine()
-        self.heuristic = HeuristicIndex()
+        self.ml_scorer = MLScorer()
         self.reporter = ReportGenerator()
         logger.info("Tum moduller yuklendi.")
 
@@ -72,12 +72,21 @@ class PHAscoutPipeline:
         if accession:
             organism_info = get_organism_info(accession)
             logger.info(f"Organizma: {organism_info.get('organism_name')}")
-            records = fetch_proteome(accession)
+            try:
+                from phascout.input.ncbi_datasets import fetch_proteome_and_gff
+                records, gff_data = fetch_proteome_and_gff(accession)
+                self.gff_data = gff_data
+            except Exception as e:
+                logger.warning(f"GFF3 alinamadi, sadece FASTA indirilecek. Hata: {e}")
+                records = fetch_proteome(accession)
+                self.gff_data = {}
             fasta_input = FastaInput.from_records(records, source=accession)
         elif fasta_file:
             fasta_input = FastaInput.from_file(fasta_file)
+            self.gff_data = {}
         elif fasta_text:
             fasta_input = FastaInput.from_text(fasta_text)
+            self.gff_data = {}
         else:
             raise ValueError("accession, fasta_file veya fasta_text gereklidir.")
 
@@ -139,6 +148,27 @@ class PHAscoutPipeline:
                     logger.info(f"PhaC sinifi: {phac_result['best_class']}")
                     logger.info(f"PhaC fonksiyonel: {phac_result['is_functional']}")
 
+        # =======================================
+        # ADIM 5.5: OPERON ANALIZI
+        # =======================================
+        logger.info("=" * 50)
+        logger.info("ADIM 5.5: Operon analizi...")
+        
+        detected_genes_dict = {}
+        for g, hits in filtered_results.items():
+            if hits:
+                detected_genes_dict[g] = {"detected": True, "protein_id": hits[0]["protein_id"]}
+            else:
+                detected_genes_dict[g] = {"detected": False}
+                
+        from phascout.prediction.operon_analyzer import analyze_operon
+        operon_result = analyze_operon(detected_genes_dict, self.gff_data if hasattr(self, 'gff_data') else {})
+        
+        if operon_result.get("is_class_i_operon") and phac_result.get("best_class") == "Class_IV":
+            logger.info("OPERON KANITI BULUNDU! Sınıflandırma Class_IV'ten Class_I'e cevriliyor.")
+            phac_result["best_class"] = "Class_I"
+            phac_result["notes"].append("OPERON KANITI: phaC-phaA-phaB yakinligi sebebiyle Sınıf Class_I olarak düzeltildi.")
+            
         phac_class = phac_result.get("best_class")
 
         # =======================================
@@ -161,13 +191,13 @@ class PHAscoutPipeline:
         )
 
         # =======================================
-        # ADIM 8: SEZGISEL INDEKS
+        # ADIM 8: MAKINE OGRENMESI (ML) SKORU
         # =======================================
         logger.info("=" * 50)
-        logger.info("ADIM 8: Sezgisel indeks hesaplaniyor...")
+        logger.info("ADIM 8: ML Biyolojik Olasilik hesaplaniyor...")
 
-        heuristic_result = self.heuristic.calculate(
-            phac_result, gene_vector, pathway_results, subunit_result
+        ml_result = self.ml_scorer.predict(
+            phac_result, gene_vector, operon_result, phac_seq if 'phac_seq' in locals() else None
         )
 
         # =======================================
@@ -183,7 +213,7 @@ class PHAscoutPipeline:
             phac_result=phac_result,
             subunit_result=subunit_result,
             pathway_results=pathway_results,
-            heuristic_result=heuristic_result,
+            heuristic_result=ml_result, # Use ml_result here to avoid rewriting reporter immediately
             carbon_recommendations=carbon_recs,
         )
 
