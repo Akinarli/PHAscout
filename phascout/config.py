@@ -37,12 +37,16 @@ PFAM_PROFILES = {
 # ============================================================
 # BLOSUM62 NORMALİZE SKOR EŞİKLERİ (Aşama 0 Kalibrasyonu)
 # Bu değerler min(qq, rr) normalizasyonu ile kalibre edilmiştir.
+# Kontamine referanslar (FabG/MabA/FabM/antiporter/PhaC) temizlendikten
+# sonra scripts/calibrate_thresholds.py ile yeniden hesaplanmıştır.
+# NOT: Pozitif referans setleri küçük (n=3-9); eşikler tek başına
+# kesin değil, double-layer'ın tüm gücü için ileride genişletilmeli.
 # ============================================================
 BLOSUM62_THRESHOLDS = {
-    "phaB": 0.8088,  # F1 = 0.500 | Negatif: FabG + SDR broad
-    "phaA": 0.4768,  # F1 = 0.857 | Negatif: FadA
-    "phaG": 0.0706,  # F1 = 1.000 (Az veri)
-    "phaJ": 0.3500,  # Negatif set henuz saglanmadigi icin varsayilan kaldi
+    "phaB": 0.4899,  # F1 = 0.923 (n=7 pos / 40 neg: FabG + SDR broad). Eski kirli set: F1=0.50
+    "phaA": 0.7161,  # F1 = 0.941 (n=9 pos / 96 neg: FadA)
+    "phaG": 0.5823,  # F1 = 1.000 (n=3 pos / 37 neg: FabG) - az veri
+    "phaJ": 0.4186,  # F1 = 1.000 (n=3 pos / 5 neg: crotonase ailesi) - cok az veri, dusuk guven
 }
 
 # ============================================================
@@ -74,14 +78,39 @@ PHAC_CLASS_PROFILES = {
 
 # ============================================================
 # KATALİTİK TRİAD POZİSYONLARI (HMM Hizalama Referans)
-# PhaC Box motifi: G[GS].C.[GA]G
 # ============================================================
 CATALYTIC_TRIAD = {
     "Cys": "C",
     "Asp": "D",
     "His": "H",
 }
-PHAC_BOX_REGEX = r"[GSY].C.[GSA]"  # Minimal lipase box: G-x-C-x-G and variants like S-Y-C-V-G (Halomonas)
+
+# Sınıf-spesifik katalitik HMM MATCH-state kolonları.
+# Bu kolonlar, deneysel olarak doğrulanmış katalitik kalıntılar
+# (UniProt ACT_SITE Cys + literatür Asp/His) bir referans diziye
+# hizalanarak ve scripts/derive_catalytic_columns.py ile mevcut
+# HMM modellerine eşlenerek türetilmiştir (yeniden üretilebilir).
+#   Class_I : C. necator P23608  C319/D480/H508
+#   Class_II: P. oleovorans P26494 C296/D451/H479
+#   Class_III: A. vinosum P45370  C149/D302/H331
+#   Class_IV: B. albus A0A1J9SXW8 C151/D306/H335
+CATALYTIC_HMM_COLUMNS = {
+    "Class_I":   {"Cys": 326, "Asp": 481, "His": 510},
+    "Class_II":  {"Cys": 297, "Asp": 452, "His": 480},
+    "Class_III": {"Cys": 162, "Asp": 315, "His": 345},
+    "Class_IV":  {"Cys": 150, "Asp": 304, "His": 333},
+}
+
+# Triad kolon eşleştirme toleransı (HMM match-state kolonu cinsinden).
+# Eski deger 25 (~50 kalintilik pencere) idi ve katalitik spesifikligi
+# yok ediyordu. Katalitik kalinti TEK bir hizalama kolonundadir;
+# kucuk bir pay sadece HMM build varyasyonlari icindir.
+TRIAD_TOLERANCE = 2
+
+# PhaC Box (lipase box) motifi: G-x-C-x-G-G ve varyantlari.
+# Box icindeki Cys, katalitik nukleofil ile AYNI kalinti olmalidir;
+# bu kosul validator'da hmm-kolon hizalamasiyla zorlanir.
+PHAC_BOX_REGEX = r"G.C.G[GA]"  # G-x-C-x-G-[G/A]: katalitik Cys nukleofil dirseginde
 
 # ============================================================
 # CLASS III/IV ALT BİRİM KONTROL

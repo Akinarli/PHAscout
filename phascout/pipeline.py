@@ -163,12 +163,20 @@ class PHAscoutPipeline:
                 
         from phascout.prediction.operon_analyzer import analyze_operon
         operon_result = analyze_operon(detected_genes_dict, self.gff_data if hasattr(self, 'gff_data') else {})
-        
-        if operon_result.get("is_class_i_operon") and phac_result.get("best_class") == "Class_IV":
-            logger.info("OPERON KANITI BULUNDU! Sınıflandırma Class_IV'ten Class_I'e cevriliyor.")
-            phac_result["best_class"] = "Class_I"
-            phac_result["notes"].append("OPERON KANITI: phaC-phaA-phaB yakinligi sebebiyle Sınıf Class_I olarak düzeltildi.")
-            
+
+        # Operon kaniti SINIFLANDIRMAYI DEGISTIRMEZ. Sinif, katalitik HMM
+        # skorlari ve triad ile belirlenir; sinteni (phaC-phaA-phaB yakinligi)
+        # ayri bir kanit olarak yalnizca NOT olarak raporlanir. (Class IV
+        # gercek bir katalitik siniftir ve operonik olabilir; sinteniyi sinifla
+        # karistirmak hatalidir.)
+        if operon_result.get("is_class_i_operon"):
+            logger.info("Operon kaniti: phaC-phaA-phaB yakinligi tespit edildi (sinif degismez).")
+            operon_result["note"] = (
+                "Sinteni kaniti: phaC, phaA/phaB ile operonik yakinlikta "
+                "(SCL-PHA yolagi icin destekleyici, siniflandirmadan bagimsiz)."
+            )
+            phac_result.setdefault("notes", []).append(operon_result["note"])
+
         phac_class = phac_result.get("best_class")
 
         # =======================================

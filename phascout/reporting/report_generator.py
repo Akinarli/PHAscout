@@ -61,9 +61,8 @@ class ReportGenerator:
                 "produces_pha": produces_pha,
                 "pha_type": active_pathways[0]["product_tendency"] if active_pathways else "N/A",
                 "phac_class": phac_result.get("best_class", "N/A"),
-                "heuristic_score": heuristic_result.get("total_score", 0),
-                "heuristic_max": heuristic_result.get("max_possible", 92),
-                "heuristic_tier": heuristic_result.get("tier", "Potansiyelsiz"),
+                "ml_probability": heuristic_result.get("ml_probability", 0.0),
+                "ml_model_loaded": heuristic_result.get("model_loaded", False),
             },
             "genes": {
                 "detected": detected_genes,
@@ -139,7 +138,8 @@ class ReportGenerator:
             lines.append(f"PHA Uretimi: HAYIR")
 
         lines.append(f"PhaC Sinifi: {s['phac_class']}")
-        lines.append(f"Sezgisel Indeks: {s['heuristic_score']}/{s['heuristic_max']} ({s['heuristic_tier']})")
+        ml_src = "model" if s.get("ml_model_loaded") else "kural-tabanli yedek"
+        lines.append(f"ML Yardimci Guven: {s.get('ml_probability', 0.0)}% ({ml_src})")
 
         # Genler
         g = report["genes"]
@@ -174,13 +174,17 @@ class ReportGenerator:
             if pw["active"]:
                 lines.append(f"    Urun egilimi: {pw['product_tendency']}")
 
-        # Skor detay
+        # ML ozellik detayi
         hi = report["heuristic_index"]
         lines.append(f"\n{'=' * 40}")
-        lines.append("SEZGISEL INDEKS DETAY")
+        lines.append("ML YARDIMCI GUVEN DETAY")
         lines.append(f"{'=' * 40}")
-        for line in hi.get("breakdown", []):
-            lines.append(f"  {line}")
+        feats = hi.get("features_used") or {}
+        for k, val in feats.items():
+            try:
+                lines.append(f"  {k}: {float(val):.2f}")
+            except (TypeError, ValueError):
+                lines.append(f"  {k}: {val}")
 
         lines.append(f"\n{'=' * 60}")
         lines.append(f"Rapor tarihi: {report['meta']['timestamp']}")

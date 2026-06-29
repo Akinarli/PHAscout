@@ -21,8 +21,8 @@ class TestPhaCValidator(unittest.TestCase):
             return None
 
     def test_class_I_independent(self):
-        # A0A1B1YJ44 (Halomonas bluephagenesis PhaC - independent)
-        seq = self.get_uniprot_seq("A0A1B1YJ44")
+        # A0A158CWD7 (Caballeronia temeraria PhaC - egitim setinde DEGIL, bagimsiz)
+        seq = self.get_uniprot_seq("A0A158CWD7")
         if not seq:
             self.skipTest("Could not fetch sequence from UniProt")
             
