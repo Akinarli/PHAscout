@@ -1,0 +1,4 @@
+accession,organism,strain,phylum,synthase_class,label_produces,label_type,carbon_source,evidence_method,citation,notes
+GCF_030704205.1,Halomonas alkalicola,EXT,Pseudomonadota,Class_I,yes,SCL,glucose,GC-MS,PLACEHOLDER-yakildi-sadece-plumbing,YAKILMIS - sadece altyapi testi icin
+GCF_000005845.2,Escherichia coli,K-12 MG1655,Pseudomonadota,unknown,no,none,glucose,gravimetric,PLACEHOLDER-plumbing,Bilinen non-uretici (phaC yok) - altyapi testi
+ROW_NO_CITATION,Test organism,X,TestPhylum,unknown,yes,SCL,glucose,GC-MS,,Bu satir atif yoklugundan REDDEDILMELI

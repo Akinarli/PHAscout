@@ -1,0 +1,4 @@
+# Üretilen koşu çıktıları (ham; özet RESULTS_run01.md'de kalıcı)
+cache/
+predictions.csv
+run_log.txt

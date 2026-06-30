@@ -14,7 +14,9 @@ Sınıf -> temel PHA tipi:
 Yardımcı genler rotayı/monomeri netleştirir:
     phaA + phaB -> asetil-CoA'dan 3HB (şekerden, SCL)
     phaG        -> de novo yağ asidi sentezinden MCL (Class II, şekerden)
-    phaJ        -> beta-oksidasyondan MCL/ko-polimer (yağ asidinden)
+    phaJ        -> beta-oksidasyondan (R)-3-hidroksiaçil-CoA besler. SENTAZA BAĞLI:
+                   Class II ile MCL; SCL-class (I/III/IV) ile yağ-asidinden SCL
+                   (3HHx ko-polimeri DEĞİL — sınıf substrat aralığıyla sınırlı).
 """
 
 # Sınıf -> temel PHA tipi
@@ -112,17 +114,28 @@ def classify_pha_potential(phac_result, gene_vector, operon_result=None):
             })
 
         if has_j:
-            # beta-oksidasyon rotası -> ko-polimer (3HHx); potansiyeli yükselt
-            potential = "SCL-co-MCL"
-            if "P(3HB)" not in products:
-                products.insert(0, "P(3HB)")
-            products.append("P(3HB-co-3HHx)")
+            # BIYOKIMYA: phaJ ((R)-spesifik enoyl-CoA hidrataz) beta-oksidasyondan
+            # (R)-3-hidroksiaçil-CoA besler. SCL-SPESIFIK bir sentazla (Class I/III/IV,
+            # substrat aralığı C4-C5) bu, yağ asidinden SCL (P3HB/P3HV) verir;
+            # 3HHx (mcl) KOPOLIMERI VERMEZ. 3HHx ancak MCL-yetenekli (Class II) ya da
+            # geniş-substratlı bir sentazla (ör. Aeromonas caviae PhaC) polimerleşir.
+            # Bu yüzden phaJ TEK BAŞINA SCL-class organizmada SCL-co-MCL iddiasını
+            # TETIKLEMEMELI (eski davranış sistematik over-claim üretiyordu). phaJ
+            # yalnızca yağ-asidinden bir SCL besleme rotası olarak raporlanır.
             routes.append({
-                "name": "Yağ asidinden (β-oksidasyon / PhaJ)",
+                "name": "Yağ asidinden SCL (β-oksidasyon / PhaJ)",
                 "substrate": "yağ asitleri (oktanoat, dekanoat...)",
                 "genes": ["phaJ", "phaC"],
-                "product": "P(3HB-co-3HHx)",
+                "product": "P(3HB)",
             })
+            if "P(3HB)" not in products:
+                products.insert(0, "P(3HB)")
+            result["notes"].append(
+                "phaJ tespit edildi: yağ asidi substratında β-oksidasyon besleme rotası. "
+                "3HHx içeren SCL-co-MCL ko-polimeri yalnızca MCL-yetenekli (Class II) veya "
+                "geniş-substratlı bir sentazla mümkündür; sınıf tek başına bunu göstermez "
+                "(genuine ko-polimer üreticileri burada SCL olarak raporlanabilir — bilinen sınır)."
+            )
 
         if routes:
             result["potential"] = potential

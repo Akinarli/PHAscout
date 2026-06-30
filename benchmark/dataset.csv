@@ -1,0 +1,16 @@
+accession,organism,strain,phylum,synthase_class,label_produces,label_type,carbon_source,evidence_method,citation,notes
+GCF_057802155.1,Zobellella denitrificans,MW1,Pseudomonadota,Class_I,yes,SCL,glycerol,gravimetric+GC,PMC2753068,PHB %80.4 CDW; Ibrahim & Steinbuchel 2009 AEM 75:6222; sus MW1 birebir
+GCF_000006965.1,Sinorhizobium meliloti,1021,Pseudomonadota,Class_I,yes,SCL,mannitol,Nile_red+quantification,PMID:17921298,PHB Rm1021; Wang 2007 J Bacteriol
+GCF_000785435.2,Paraburkholderia sacchari,LMG 19450,Pseudomonadota,Class_I,yes,SCL,sucrose/xylose,gravimetric+GC,PMC6960187,P(3HB) sekerden; tip sus IPT101=LMG19450 (BacDive)
+GCF_900102035.1,Pseudomonas extremaustralis,DSM 17835,Pseudomonadota,Class_I,yes,SCL,octanoate,GC+TEM,PMID:19688380,Antarktik PHB (nadir SCL Pseudomonas); tip sus 14-3=DSM17835; ayrica mcl makinesi var
+GCF_000423545.1,Metapseudomonas resinovorans,DSM 21078,Pseudomonadota,Class_II,yes,MCL,octanoate/oil,GC-MS,PMC9268961,mcl-PHA klasik uretici; tip sus DSM 21078
+GCF_000204295.1,Ectopseudomonas mendocina,NK-01,Pseudomonadota,Class_II,yes,MCL,glucose,GC+quantification,PMC6372614,mcl-PHA; iki Class II sentaz (phaC1/phaC2); sus NK-01 birebir
+GCF_000025485.1,Allochromatium vinosum,DSM 180,Pseudomonadota,Class_III,yes,SCL,acetate,in_vitro_synthase+GC,PMID:19711985,Class III PhaEC arketipi (C149 katalitik); kukurt bakterisi PHB
+GCF_005406325.1,Haloferax mediterranei,ATCC 33500,Euryarchaeota,Class_III,yes,SCL,glucose/starch,GC-MS,PMC3416209,ARCHAEA - PHBV ~60% CDW; PhaEC; arkeal phaC pipeline icin zorlu test
+GCF_000009725.1,Synechocystis sp.,PCC 6803,Cyanobacteria,Class_III,yes,SCL,CO2_photoautotroph,quantification+TEM,PMC8413580,SIYANOBAKTERI - azot kisitinda PHB; fotoautotrof
+GCF_000381125.1,Caldimonas manganoxidans,ATCC BAA-369,Pseudomonadota,Class_I,yes,SCL,glycerol,GC+quantification,DOI:10.1007/s12010-016-2138-0,TERMOFIL - gliserolden %71 PHB; tip sus ATCC BAA-369
+GCF_001854325.1,Cupriavidus malaysiensis,USMAA1020,Pseudomonadota,Class_I,yes,SCL,fructose/oil,GC+quantification,PMID:30557643,KANONIK CINS Cupriavidus; dogal P(3HB) / P(3HB-co-4HB) (4HB SCL); sus USMAA1020 birebir
+GCF_000092165.1,Bacillus thuringiensis,BMB171,Bacillota,Class_IV,yes,SCL,glucose,phaC_knockout+GC,PMC4908106,CLASS IV (PhaRC); BMB171'de phaC/phaZ knockout PHB'yi dogruluyor; sus birebir
+GCF_000005845.2,Escherichia coli,K-12 MG1655,Pseudomonadota,none,no,none,glucose,recombinant_control,PMID:2832376,GUCLU NEGATIF: yabani tip PHB uretmez (Slater 1988); phaCAB sokuldugunda uretir
+GCF_000011325.1,Corynebacterium glutamicum,ATCC 13032,Actinomycetota,none,no,none,glucose,recombinant_control,PMC6004086,GUCLU NEGATIF: WT PHA uretmez; phaCAB ile uretici olur (WM001 calismasi)
+GCF_020542785.2,Rhodococcus opacus,PD630,Actinomycetota,none,no,none,gluconate,experimental_TAG_not_PHA,PMID:10832641,GUCLU NEGATIF + AYRIM TESTI: %98 notr lipid (TAG), PHA DEGIL; Alvarez 1996
