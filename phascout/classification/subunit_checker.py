@@ -22,7 +22,7 @@ class SubunitChecker:
     """
     PhaC sınıfına göre gerekli alt birimlerin varlığını kontrol eder.
 
-    - Class III -> PhaE (PF08333) gereklidir.
+    - Class III -> PhaE (PF09712) gereklidir.
     - Class IV  -> PhaR (PF07879) gereklidir.
     - Class I/II -> Alt birim gerekmez.
     """

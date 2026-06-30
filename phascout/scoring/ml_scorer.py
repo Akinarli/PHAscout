@@ -8,6 +8,13 @@ yardimci guven olasiligi uretir.
 Ozellikler ve uretim yontemi, scripts/train_ml_scorer.py ile BIREBIR
 aynidir (egitim/cikarim tutarliligi). Model bulunamazsa seffaf, kural
 tabanli bir yedek (fallback) skor kullanilir.
+
+ONEMLI KISIT (dairesellik): 'hmm_score' ozelligi, ayni pozitif dizilerden
+(phac_classes_clean) insa edilen sinif HMM'lerine karsi hesaplanir. Yani model
+kismen "yuksek HMM skoru = PhaC"yi ezberler ve egitimdeki capraz-dogrulama
+ROC-AUC/MCC degerleri IYIMSER'dir; genelleme performansi olarak ALINTILANMAMALI.
+Bu skor yalnizca YARDIMCI bir guven sinyalidir ve deterministik (triad+box)
+karari ASLA gecersiz kilmaz.
 """
 
 import os
