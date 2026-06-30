@@ -1,13 +1,14 @@
 """
-pathway_engine PHBV/3HV regresyon testleri.
+pathway_engine — PHBV/3HV + birleşik-karar (pha_type otoritesi) regresyon testleri.
 
-Ana koruma: delta yolagi phaA+phaB TEK BASINA P(3HB-co-3HV)'yi DOGRULANMIS bir
-cikti olarak iddia ETMEMELI. 3HV monomeri propiyonil-CoA rotasi (C5-kabul eden
-tiyolaz + tek-karbon-sayili VFA) gerektirir; PHAscout 3HV-onculu sinyal aramaz.
-Bu yuzden delta aktif olsa bile ciktisi KOSULLU olarak isaretlenmeli ve
-intrinsik egilim P(3HB) olarak ifade edilmeli.
+İki ana koruma:
+  1. PHBV: delta yolağı phaA+phaB TEK BAŞINA P(3HB-co-3HV)'yi DOĞRULANMIŞ çıktı
+     olarak iddia etmemeli (CONDITIONAL + 3HV-öncül uyarısı).
+  2. Birleşik karar: yolak motoru pha_type'a TABİDİR. pha_type 'belirsiz'/'none'
+     derse veya PhaC fonksiyonel değilse HİÇBİR yolak aktif olmamalı; böylece
+     rapor kendisiyle çelişmez.
 
-Calistirma:  python -m pytest tests/test_pathway_phbv.py
+Çalıştırma:  python -m pytest tests/test_pathway_phbv.py
 """
 
 import os
@@ -16,6 +17,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from phascout.prediction.pathway_engine import PathwayEngine
+from phascout.prediction.pha_type import classify_pha_potential
 
 
 def _gv(**kw):
@@ -24,44 +26,98 @@ def _gv(**kw):
     return base
 
 
-def _delta(pathways):
-    return next(p for p in pathways if p["pathway_id"] == "delta")
+def _phac(cls, functional=True):
+    return {"best_class": cls, "is_functional": functional}
 
+
+def _pathways(phac, gv):
+    """Pipeline ile AYNI çağrı: pha_type otorite, sonra yolak motoru."""
+    pot = classify_pha_potential(phac, gv, {})
+    return PathwayEngine().determine_pathways(
+        gv, phac.get("best_class"),
+        functional=phac.get("is_functional", False),
+        pha_potential=pot,
+    ), pot
+
+
+def _get(pathways, pid):
+    return next(p for p in pathways if p["pathway_id"] == pid)
+
+
+# ---- PHBV / delta ----
 
 def test_delta_does_not_bare_assert_phbv():
-    # Class I + phaA+phaB (3HV-onculu gen YOK) -> delta aktif olabilir AMA
-    # ciktisi kosulsuz "P(3HB-co-3HV)" OLMAMALI.
-    pw = PathwayEngine().determine_pathways(_gv(phaC=1, phaA=1, phaB=1), "Class_I")
-    delta = _delta(pw)
-    assert delta["active"] is True, "delta phaA+phaB ile aktif olmali"
+    pw, pot = _pathways(_phac("Class_I"), _gv(phaC=1, phaA=1, phaB=1))
+    assert pot["potential"] == "SCL"
+    delta = _get(pw, "delta")
+    assert delta["active"] is True
     prod = delta["product_tendency"]
-    # Kosulsuz PHBV iddiasi olmamali: ya kosul ifadesi icermeli ya da P(3HB) one cikmali
     assert "koşullu" in prod.lower() or "yalnızca" in prod.lower() or "P(3HB)" in prod, prod
     assert delta.get("confidence") == "CONDITIONAL", delta.get("confidence")
 
 
 def test_delta_note_warns_about_3hv_precursor():
-    pw = PathwayEngine().determine_pathways(_gv(phaC=1, phaA=1, phaB=1), "Class_I")
-    note = _delta(pw)["note"].lower()
+    pw, _ = _pathways(_phac("Class_I"), _gv(phaC=1, phaA=1, phaB=1))
+    note = _get(pw, "delta")["note"].lower()
     assert "3hv" in note and ("vfa" in note or "propiyonat" in note), note
 
 
 def test_alpha_still_p3hb():
-    # alpha (sekerden SCL) degismemeli: P(3HB)
-    pw = PathwayEngine().determine_pathways(_gv(phaC=1, phaA=1, phaB=1), "Class_I")
-    alpha = next(p for p in pw if p["pathway_id"] == "alpha")
+    pw, _ = _pathways(_phac("Class_I"), _gv(phaC=1, phaA=1, phaB=1))
+    alpha = _get(pw, "alpha")
     assert alpha["active"] is True
     assert "P(3HB)" in alpha["product_tendency"], alpha["product_tendency"]
 
 
+# ---- Birleşik karar: pha_type otoritesi ----
+
+def test_class_ii_phac_only_no_active_pathway():
+    # R. opacus deseni: Class II + sadece phaC -> pha_type 'belirsiz'.
+    # ESKI HATA: beta (required=[phaC]) AKTIF -> MCL diyordu (çelişki).
+    # Artık: pha_type belirsiz olduğu için HİÇBİR yolak aktif değil.
+    pw, pot = _pathways(_phac("Class_II"), _gv(phaC=1))
+    assert pot["potential"] == "belirsiz"
+    assert all(not p["active"] for p in pw), [p["pathway_id"] for p in pw if p["active"]]
+    assert any("cekimser" in p["note"].lower() or "çekimser" in p["note"].lower() for p in pw)
+
+
+def test_nonfunctional_phac_no_active_pathway():
+    # E. coli deseni: phaC HMM hit var ama fonksiyonel değil.
+    # ESKI RİSK: yolak motoru phaC VARLIĞINA bakıp aktif diyebilirdi.
+    pw, pot = _pathways(_phac("Class_I", functional=False), _gv(phaC=1, phaA=1, phaB=1))
+    assert pot["potential"] == "none"
+    assert all(not p["active"] for p in pw)
+    assert any("fonksiyonel" in p["note"].lower() for p in pw)
+
+
+def test_class_ii_mcl_activates_only_mcl():
+    # Class II + phaG -> pha_type MCL. SCL yolakları (alpha/delta) aktif olmamalı.
+    pw, pot = _pathways(_phac("Class_II"), _gv(phaC=1, phaG=1))
+    assert pot["potential"] == "MCL"
+    assert _get(pw, "gamma")["active"] is True
+    assert _get(pw, "alpha")["active"] is False
+    assert _get(pw, "delta")["active"] is False
+
+
+def test_no_phac_no_active_pathway():
+    pw, pot = _pathways(_phac(None, functional=False), _gv())
+    assert pot["potential"] == "none"
+    assert all(not p["active"] for p in pw)
+
+
+def test_consistency_active_implies_positive_potential():
+    # Genel değişmez: herhangi bir aktif yolak varsa, pha_type pozitif olmalı.
+    for phac, gv in [
+        (_phac("Class_I"), _gv(phaC=1, phaA=1, phaB=1)),
+        (_phac("Class_II"), _gv(phaC=1, phaG=1)),
+        (_phac("Class_II"), _gv(phaC=1)),             # belirsiz
+        (_phac("Class_I", functional=False), _gv(phaC=1, phaA=1, phaB=1)),  # none
+    ]:
+        pw, pot = _pathways(phac, gv)
+        if any(p["active"] for p in pw):
+            assert pot["potential"] in ("SCL", "MCL", "SCL-co-MCL"), (gv, pot["potential"])
+
+
 if __name__ == "__main__":
-    fns = [v for k, v in sorted(globals().items()) if k.startswith("test_")]
-    passed = 0
-    for fn in fns:
-        try:
-            fn()
-            print(f"  [OK ] {fn.__name__}")
-            passed += 1
-        except AssertionError as e:
-            print(f"  [HATA] {fn.__name__}: {e}")
-    print(f"\n{passed}/{len(fns)} gecti")
+    import pytest
+    sys.exit(pytest.main([__file__, "-q"]))

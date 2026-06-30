@@ -266,12 +266,27 @@ class PHAscoutPipeline:
         subunit_result = self.subunit_checker.check(phac_class, hmm_results)
 
         # =======================================
-        # ADIM 7: YOLAK ANALIZI
+        # ADIM 7: PHA TIPI POTANSIYELI (OTORITE) + YOLAK ANALIZI
         # =======================================
+        # BIRLESIK KARAR: pha_type otoritedir; yolak motoru ona tabidir. Bu
+        # yuzden pha_potential'i ONCE hesaplayip yolak motoruna veririz; boylece
+        # rapordaki yolak tablosu pha_type ile ASLA celismez.
         logger.info("=" * 50)
-        logger.info("ADIM 7: Yolak analizi...")
+        logger.info("ADIM 7: PHA potansiyeli + yolak analizi...")
 
-        pathway_results = self.pathway_engine.determine_pathways(gene_vector, phac_class)
+        from phascout.prediction.pha_type import classify_pha_potential
+        pha_potential = classify_pha_potential(phac_result, gene_vector, operon_result)
+        logger.info(
+            f"PHA tipi potansiyeli: {pha_potential['potential']} "
+            f"(guven: {pha_potential['confidence']})"
+        )
+
+        pathway_results = self.pathway_engine.determine_pathways(
+            gene_vector,
+            phac_class,
+            functional=phac_result.get("is_functional", False),
+            pha_potential=pha_potential,
+        )
         carbon_recs = self.pathway_engine.get_carbon_recommendations(
             pathway_results, carbon_source
         )
@@ -313,13 +328,6 @@ class PHAscoutPipeline:
                 phac_result.setdefault("notes", []).append(
                     f"NOT: Fonksiyonel triad bulundu ancak ML guveni dusuk ({ml_p}%) - elle gozden gecirilebilir."
                 )
-
-        # =======================================
-        # ADIM 8.7: PHA TIPI POTANSIYELI (yorum)
-        # =======================================
-        from phascout.prediction.pha_type import classify_pha_potential
-        pha_potential = classify_pha_potential(phac_result, gene_vector, operon_result)
-        logger.info(f"PHA tipi potansiyeli: {pha_potential['potential']} (guven: {pha_potential['confidence']})")
 
         # =======================================
         # ADIM 9: RAPOR URETIMI

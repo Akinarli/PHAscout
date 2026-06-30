@@ -24,44 +24,64 @@ logger = logging.getLogger(__name__)
 
 class PathwayEngine:
     """
-    Boolean mantik ile metabolik yolak aktivasyonu belirler.
+    Metabolik yolak aktivasyonunu belirler.
+
+    BIRLESIK KARAR: Bu katman ARTIK BAGIMSIZ bir karar vermez; pha_type
+    (classify_pha_potential) OTORITEDIR. Bir yolak yalnizca (1) PhaC FONKSIYONEL
+    ise ve (2) pha_type SOMUT bir potansiyel (SCL/MCL/SCL-co-MCL) verdiyse aktif
+    olabilir. pha_type 'none'/'belirsiz' derse HICBIR yolak aktif olmaz. Boylece
+    rapor kendisiyle CELISMEZ (or. pha_type 'belirsiz' derken yolak tablosunun
+    'beta AKTIF -> MCL' demesi gibi eski tutarsizliklar giderilir).
     """
 
-    def determine_pathways(self, gene_vector: dict, phac_class: str) -> list:
+    # pha_type'in pozitif (somut tip iddiasi olan) potansiyelleri
+    POSITIVE_POTENTIALS = {"SCL", "MCL", "SCL-co-MCL"}
+
+    def determine_pathways(self, gene_vector: dict, phac_class: str,
+                           functional: bool = False, pha_potential: dict = None) -> list:
         """
-        Aktif yolakları belirle.
+        Aktif yolakları belirle (pha_type otoritesine TABI).
 
         Args:
-            gene_vector: Gen tespit sonuclari.
-                         dict: gen_adi -> bool (True = tespit edildi)
-                         Ornek: {"phaC": True, "phaA": True, "phaB": True, ...}
-            phac_class: PhaC sinifi ("Class_I", "Class_II", "Class_III", "Class_IV")
-                        veya None (PhaC bulunamadiysa)
+            gene_vector: Gen tespit sonuclari (gen_adi -> bool).
+            phac_class: PhaC sinifi ("Class_I".."Class_IV") veya None.
+            functional: Secilen PhaC fonksiyonel mi (triad+box)?
+                        (phac_result["is_functional"]).
+            pha_potential: classify_pha_potential() ciktisi (OTORITE). 'potential'
+                           anahtarini icerir: none/belirsiz/SCL/MCL/SCL-co-MCL.
 
         Returns:
-            list[dict]: Aktif yolak listesi. Her eleman:
-                {
-                    'pathway_id': str,
-                    'name': str,
-                    'active': bool,
-                    'carbon_sources': list[str],
-                    'product_tendency': str,
-                    'missing_genes': list[str],
-                    'note': str,
-                }
+            list[dict]: Yolak listesi (active, name, carbon_sources,
+                        product_tendency, missing_genes, note, [confidence]).
         """
         results = []
+        potential = (pha_potential or {}).get("potential", "none")
+        has_phac = gene_vector.get("phaC", False)
+        decided_positive = (
+            has_phac and functional and potential in self.POSITIVE_POTENTIALS
+        )
 
-        if not gene_vector.get("phaC", False):
-            logger.info("PhaC bulunamadi, hicbir yolak aktif degil.")
+        # OTORITE KAPISI: PhaC yok / fonksiyonel degil / pha_type cekimser ise
+        # hicbir yolak aktif degildir (pha_type ile tam tutarlilik).
+        if not decided_positive:
+            if not has_phac:
+                reason = "PhaC bulunamadi."
+            elif not functional:
+                reason = "Fonksiyonel PhaC (triad+box) dogrulanamadi."
+            else:
+                reason = (
+                    f"pha_type cekimser/negatif ('{potential}'): somut PHA tipi "
+                    "iddiasi yok; yolak aktif sayilmaz."
+                )
+            logger.info(f"Yolak aktivasyonu kapali: {reason}")
             return [{
                 "pathway_id": pathway_id,
                 "name": pdef["name"],
                 "active": False,
                 "carbon_sources": [],
-                "product_tendency": "Uretim beklenmez",
-                "missing_genes": ["phaC"],
-                "note": "PhaC bulunamadi.",
+                "product_tendency": pdef["product_tendency"],
+                "missing_genes": [g for g in pdef["required_genes"] if not gene_vector.get(g, False)],
+                "note": reason,
             } for pathway_id, pdef in PATHWAYS.items()]
 
         for pathway_id, pdef in PATHWAYS.items():

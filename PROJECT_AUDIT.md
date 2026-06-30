@@ -57,9 +57,27 @@ behavior change to PhaC detection; the only logic change is the PHBV caveat.
   1564 bp from phaC) → SCL potential. New tests `tests/test_gene_caller.py` (5).
   Full suite: **17 passed**.
 
+### Unified prediction layer — DONE (2026-06-30, fourth pass)
+
+The two layers no longer compute independently. `pha_type.classify_pha_potential`
+is now the **single authority**; `pathway_engine.determine_pathways` is subordinate:
+
+- It now takes `functional` + `pha_potential`. A pathway can be active **only** when
+  PhaC is functional **and** `pha_type` reports a concrete potential (SCL/MCL/SCL-co-MCL).
+  If `pha_type` is `none`/`belirsiz`, **no** pathway is active.
+- Pipeline reordered: `pha_potential` is computed before the pathway analysis and passed in.
+- This kills the live contradictions:
+  - Class II + phaC-only (R. opacus): `pha_type` abstains → `beta` (which required only
+    phaC) no longer shows "active → MCL". (Previously contradictory.)
+  - Non-functional PhaC (E. coli): pathway activation keyed on phaC *presence* before;
+    now keyed on *functionality* → all inactive.
+  - `epsilon` product wording no longer bare-asserts SCL-co-MCL for SCL-class + phaJ
+    (same over-claim class as the earlier delta/PHBV fix); now class-conditional.
+- New invariant test: *any* active pathway implies a positive `pha_type` potential.
+  Suite 17 → 22; report verified internally consistent end-to-end.
+
 ### Still outstanding (larger roadmap — not started)
 
-- **Single unified prediction layer** (collapse `pathway_engine` + `pha_type`).
 - **Expanded negative set** — n=2 cannot support any specificity claim.
 - **Archaeal / monomer-route HMM coverage** (Haloferax, Synechocystis abstain on phaA/phaB).
 - **Fresh held-out validation** — the current 14 genomes are now burned; the fixes must be

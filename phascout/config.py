@@ -189,12 +189,22 @@ PATHWAYS = {
     },
     "epsilon": {
         # Yag asidi beta-oksidasyonundan PhaJ ((R)-spesifik enoyl-CoA hidrataz)
-        # araciligiyla PHA. Arketip: Aeromonas caviae -> P(3HB-co-3HHx).
-        # Kanonik phaA/phaB gerektirmez; monomerler beta-oksidasyondan gelir.
+        # araciligiyla PHA. Kanonik phaA/phaB gerektirmez; monomerler
+        # beta-oksidasyondan gelir. URUN SINIFA BAGLIDIR: SCL-sinifi sentaz
+        # (Class I/III/IV, substrat araligi C4-C5) -> yag asidinden SCL; Class II
+        # -> MCL. 3HHx ICEREN SCL-co-MCL ko-polimeri yalnizca MCL-yetenekli ya da
+        # genis-substratli (or. Aeromonas caviae) bir sentazla olusur; sinif tek
+        # basina bunu GOSTERMEZ. Bu yuzden product_tendency'de kosulsuz
+        # "SCL-co-MCL" iddia EDILMEZ (eski davranis sistematik over-claim'di;
+        # pha_type ile tutarli hale getirildi).
         "name": "Yağ Asidinden PHA (β-oksidasyon / PhaJ rotası)",
         "required_genes": ["phaC", "phaJ"],
         "valid_phac_classes": ["Class_I", "Class_II", "Class_III"],
         "carbon_sources": ["octanoate", "decanoate", "dodecanoate", "fatty_acids"],
-        "product_tendency": "SCL-co-MCL PHA (ör. P(3HB-co-3HHx))",
+        "product_tendency": (
+            "Yağ asidinden PHA (sınıfa bağlı: SCL-sınıfı→SCL, Class II→MCL). "
+            "3HHx içeren SCL-co-MCL ko-polimeri yalnızca MCL-yetenekli/geniş-substratlı "
+            "sentazla — sınıf tek başına göstermez"
+        ),
     },
 }
