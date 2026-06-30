@@ -1,0 +1,81 @@
+Strain_Name,Assembly_Accession,Expected_Result,Expected_Class,Source,In_HMM_Build
+Haloarcula hispanica (strain ATCC 33960 / DSM 4426 / JCM 8911 / NBRC 102182 / NCIMB 2187 / VKM B-1755),G0HQZ6,Positive,Class_I,UniProt_Holdout,No
+Cupriavidus necator (strain ATCC 17699 / DSM 428 / KCTC 22496 / NCIMB 10442 / H16 / Stanier 337),P23608,Positive,Class_I,UniProt_Holdout,No
+Haloarcula marismortui (strain ATCC 43049 / DSM 3752 / JCM 8966 / VKM B-1809),Q5UYM0,Positive,Class_I,UniProt_Holdout,No
+Halalkalibacter okhensis,A0A0B0ILK0,Positive,Class_I,UniProt_Holdout,No
+Priestia megaterium (strain ATCC 14581 / DSM 32 / CCUG 1817 / JCM 2506 / NBRC 15308 / NCIMB 9376 / NCTC 10342 / NRRL B-14308 / VKM B-512 / Ford 19),A0A0B6AHH5,Positive,Class_I,UniProt_Holdout,No
+Priestia filamentosa,A0A0H4KN34,Positive,Class_I,UniProt_Holdout,No
+Sporosarcina pasteurii,A0A380C0R5,Positive,Class_I,UniProt_Holdout,No
+Halosimplex rubrum,A0A7D5TJJ4,Positive,Class_I,UniProt_Holdout,No
+Priestia flexa,A0A8I1MHS0,Positive,Class_I,UniProt_Holdout,No
+Haloterrigena salifodinae,A0A8T8DZ60,Positive,Class_I,UniProt_Holdout,No
+Haloarcula nitratireducens,A0AAW4PEY7,Positive,Class_I,UniProt_Holdout,No
+Gottfriedia acidiceleris,A0ABY4JSQ2,Positive,Class_I,UniProt_Holdout,No
+Niallia oryzisoli,A0ABZ2CCC8,Positive,Class_I,UniProt_Holdout,No
+Priestia megaterium (strain ATCC 12872 / QMB1551),D5DZA0,Positive,Class_I,UniProt_Holdout,No
+Priestia megaterium,Q9ZF92,Positive,Class_I,UniProt_Holdout,No
+Burkholderia pseudomallei (strain 1026b),A0A0H3HJK2,Positive,Class_I,UniProt_Holdout,No
+Caballeronia temeraria,A0A158CWD7,Positive,Class_I,UniProt_Holdout,No
+Caballeronia humi,A0A158IAR7,Positive,Class_I,UniProt_Holdout,No
+Caballeronia cordobensis,A0A158JT57,Positive,Class_I,UniProt_Holdout,No
+Caballeronia terrestris,A0A158JUY7,Positive,Class_I,UniProt_Holdout,No
+Caballeronia arvi,A0A158KCT9,Positive,Class_I,UniProt_Holdout,No
+Caballeronia terrestris,A0A158KS66,Positive,Class_I,UniProt_Holdout,No
+Caballeronia choica,A0A158L5K1,Positive,Class_I,UniProt_Holdout,No
+Caballeronia arvi,A0A158L600,Positive,Class_I,UniProt_Holdout,No
+Vibrio europaeus,A0A178J9G2,Positive,Class_I,UniProt_Holdout,No
+Burkholderia puraquae,A0A1D8BIL9,Positive,Class_I,UniProt_Holdout,No
+Sphingobium cloacae,A0A1E1F7G2,Positive,Class_I,UniProt_Holdout,No
+Hyphomonas beringensis,A0A062UFQ2,Positive,Class_II,UniProt_Holdout,No
+Pseudomonas fildesensis,A0A0J8G4L8,Positive,Class_II,UniProt_Holdout,No
+Pseudomonas fildesensis,A0A0J8IVH4,Positive,Class_II,UniProt_Holdout,No
+Pseudomonas meliae,A0A0N8S6B0,Positive,Class_II,UniProt_Holdout,No
+Pseudomonas paralactis,A0A0R3AGI9,Positive,Class_II,UniProt_Holdout,No
+Pseudomonas viridiflava ICMP 13104,A0A0W0IHU3,Positive,Class_II,UniProt_Holdout,No
+Allochromatium palmeri,A0A6N8EFK8,Positive,Class_III,UniProt_Holdout,No
+Allochromatium humboldtianum,A0A850RA32,Positive,Class_III,UniProt_Holdout,No
+Allochromatium tepidum,A0ABN6G6F3,Positive,Class_III,UniProt_Holdout,No
+Synechocystis salina LEGE 00031,A0ABR9VPZ0,Positive,Class_III,UniProt_Holdout,No
+Bacillus gaemokensis,A0A073K8H9,Positive,Class_IV,UniProt_Holdout,No
+Bacillus mycoides,A0A084J540,Positive,Class_IV,UniProt_Holdout,No
+Bacillus clarus,A0A090ZAA5,Positive,Class_IV,UniProt_Holdout,No
+Aneurinibacillus migulanus,A0A0D1XIT6,Positive,Class_IV,UniProt_Holdout,No
+Bacillus wiedmannii,A0A150EHW0,Positive,Class_IV,UniProt_Holdout,No
+Bacillus paranthracis,A0A1J9YPG1,Positive,Class_IV,UniProt_Holdout,No
+Bacillus pacificus,A0A1J9ZDG5,Positive,Class_IV,UniProt_Holdout,No
+Bacillus toyonensis,A0A1V6LAT3,Positive,Class_IV,UniProt_Holdout,No
+Bacillus fungorum,A0A2G6QFQ4,Positive,Class_IV,UniProt_Holdout,No
+Salipaludibacillus keqinensis,A0A323TF27,Positive,Class_IV,UniProt_Holdout,No
+Psychrobacillus lasiicapitis,A0A544T1Z4,Positive,Class_IV,UniProt_Holdout,No
+Neobacillus bataviensis,A0A561DYW8,Positive,Class_IV,UniProt_Holdout,No
+Bacillus tropicus,A0A5C5A540,Positive,Class_IV,UniProt_Holdout,No
+Bacillus anthracis,A0A6H3ADP5,Positive,Class_IV,UniProt_Holdout,No
+Bacillus luti,A0A7V7S867,Positive,Class_IV,UniProt_Holdout,No
+[Anoxybacillus] calidus,A0A7V9Z2C7,Positive,Class_IV,UniProt_Holdout,No
+Bacillus bombysepticus str. Wang,A0A9W3PPX3,Positive,Class_IV,UniProt_Holdout,No
+Bacillus thuringiensis,A0A9X5N5R3,Positive,Class_IV,UniProt_Holdout,No
+Bacillus proteolyticus,A0AA44R8L2,Positive,Class_IV,UniProt_Holdout,No
+Bacillus rhizoplanae,A0ABM8YE73,Positive,Class_IV,UniProt_Holdout,No
+Bacillus rhizoplanae,A0ABM8YGB7,Positive,Class_IV,UniProt_Holdout,No
+Bacillus arachidis,A0ABS3NTL7,Positive,Class_IV,UniProt_Holdout,No
+Bacillus pretiosus,A0ABT3EU38,Positive,Class_IV,UniProt_Holdout,No
+Bacillus hominis,A0ABT7R651,Positive,Class_IV,UniProt_Holdout,No
+Bacillus bingmayongensis,A0ABU5JUY1,Positive,Class_IV,UniProt_Holdout,No
+Bacillus paramycoides,A0ABU6MRB4,Positive,Class_IV,UniProt_Holdout,No
+Bacillus nitratireducens,A0ABU6P6B1,Positive,Class_IV,UniProt_Holdout,No
+Bacillus yunxiaonensis,A0ABU8FWB1,Positive,Class_IV,UniProt_Holdout,No
+Bacillus mobilis,A0ABV4RUM4,Positive,Class_IV,UniProt_Holdout,No
+Bacillus paramobilis,A0ABZ2VKD7,Positive,Class_IV,UniProt_Holdout,No
+Bacillus dicomae,A0AC61TA18,Positive,Class_IV,UniProt_Holdout,No
+Bacillus cereus,Q1HGN1,Positive,Class_IV,UniProt_Holdout,No
+Bacillus cereus (strain ATCC 14579 / DSM 31 / CCUG 7414 / JCM 2152 / NBRC 15305 / NCIMB 9373 / NCTC 2599 / NRRL B-3711),Q81G90,Positive,Class_IV,UniProt_Holdout,No
+Bacillus sp. INT005,Q8GI81,Positive,Class_IV,UniProt_Holdout,No
+Halobacillus trueperi,A0A0D5CD86,Positive,Class_IV,UniProt_Holdout,No
+Halobacillus mangrovi,A0A0D5CD90,Positive,Class_IV,UniProt_Holdout,No
+Halobacillus alkaliphilus,A0A0D5CD91,Positive,Class_IV,UniProt_Holdout,No
+Halobacillus mangrovi,A0A0D5CDA1,Positive,Class_IV,UniProt_Holdout,No
+Halobacillus mangrovi,A0A0D5CE32,Positive,Class_IV,UniProt_Holdout,No
+Halobacillus trueperi,A0A0D5CE69,Positive,Class_IV,UniProt_Holdout,No
+Halobacillus halophilus,A0A0D5CE75,Positive,Class_IV,UniProt_Holdout,No
+Pontibacillus chungwhensis,A0A0D5CE89,Positive,Class_IV,UniProt_Holdout,No
+Peribacillus muralis,A0A1B3XPT5,Positive,Class_IV,UniProt_Holdout,No
