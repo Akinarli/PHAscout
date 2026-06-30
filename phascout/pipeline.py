@@ -82,11 +82,28 @@ class PHAscoutPipeline:
                 self.gff_data = {}
             fasta_input = FastaInput.from_records(records, source=accession)
         elif fasta_file:
-            fasta_input = FastaInput.from_file(fasta_file)
-            self.gff_data = {}
+            # Ham (anote edilmemis) nukleotit genom/kontig girdisi otomatik
+            # tespit edilir ve Prodigal ile gen cagrilir; protein FASTA'si ise
+            # dogrudan okunur.
+            from phascout.input.gene_caller import is_nucleotide_input, call_genes
+            if is_nucleotide_input(path=fasta_file):
+                logger.info("Nukleotit girdi tespit edildi -> Prodigal ile gen cagriliyor...")
+                records, gff = call_genes(nucleotide_fasta_path=fasta_file)
+                fasta_input = FastaInput.from_records(records, source=f"{fasta_file} (Prodigal)")
+                self.gff_data = gff
+            else:
+                fasta_input = FastaInput.from_file(fasta_file)
+                self.gff_data = {}
         elif fasta_text:
-            fasta_input = FastaInput.from_text(fasta_text)
-            self.gff_data = {}
+            from phascout.input.gene_caller import is_nucleotide_input, call_genes
+            if is_nucleotide_input(text=fasta_text):
+                logger.info("Nukleotit metin girdi tespit edildi -> Prodigal ile gen cagriliyor...")
+                records, gff = call_genes(fasta_text=fasta_text)
+                fasta_input = FastaInput.from_records(records, source="text_input (Prodigal)")
+                self.gff_data = gff
+            else:
+                fasta_input = FastaInput.from_text(fasta_text)
+                self.gff_data = {}
         else:
             raise ValueError("accession, fasta_file veya fasta_text gereklidir.")
 

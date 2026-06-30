@@ -3,7 +3,7 @@
 The PHAscout pipeline is a de novo, open-source computational tool designed for the genome-wide identification and classification of polyhydroxyalkanoate (PHA) biosynthesis genes. The pipeline estimates the **genomic potential** for PHA biosynthesis (currently reported as SCL, MCL, "uncertain", or none) from an annotated proteome. It does **not** assert PHA production; genomic potential requires experimental validation. The methodology consists of five sequential analytical layers.
 
 ## 1. Data Acquisition and Preprocessing
-The pipeline accepts a GenBank Assembly Accession number (e.g., GCF_030505695.1). Utilizing the NCBI Datasets API, the system automatically retrieves the complete proteome (amino acid sequences) and corresponding GFF3 annotation files. The proteome is parsed using `Biopython`, rendering thousands of uncharacterized protein sequences ready for high-throughput screening.
+The pipeline accepts three input types: (i) a GenBank Assembly Accession (e.g., GCF_030505695.1) — the NCBI Datasets API retrieves the proteome and GFF3 annotation; (ii) a protein FASTA; or (iii) a raw, unannotated nucleotide genome/contig FASTA. Nucleotide input is auto-detected (by alphabet composition) and gene-called with **Prodigal**; Prodigal's per-gene coordinates are reused for the operon/synteny layer, so raw genomes get the same downstream analysis as annotated proteomes. Sequences are parsed with `Biopython`.
 
 ## 2. Hidden Markov Model (HMM) Scanning
 To identify putative PHA biosynthesis enzymes without relying on sequence identity tools like BLAST (which are prone to false positives due to generic hydrolases), PHAscout employs probabilistic Hidden Markov Models (HMMs). 

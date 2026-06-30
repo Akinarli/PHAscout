@@ -51,10 +51,13 @@ including:
 
 - The negative set is small — specificity/precision figures are **not** yet
   trustworthy and should not be quoted as headline accuracy.
-- Input must be a **pre-annotated proteome**; raw-assembly gene calling
-  (Prodigal/Bakta) is not yet integrated.
 - PHBV (3HV) potential requires a 3HV-precursor signal, which is being made
   explicit (see the audit).
+
+Input can be an NCBI accession, a **protein** FASTA, or — new — a **raw
+(unannotated) nucleotide genome/contig** FASTA: nucleotide input is
+auto-detected and gene-called with Prodigal before screening, and Prodigal's
+coordinates are reused for operon/synteny analysis.
 
 > Earlier versions of this README reported large-scale accuracy figures
 > (e.g. a "90-genome, 100% precision" benchmark) and described specific
@@ -70,10 +73,12 @@ including:
 pip install -r requirements.txt
 ```
 
-External tools used at runtime come from the `bioinfo` conda environment
-(HMMER via `pyhmmer`, Biopython). BLAST/Bakta/Prodigal/DIAMOND/MMseqs2/MAFFT/
-Snakemake are present in the environment but are **not** part of the runtime
-pipeline (MAFFT/hmmbuild are used offline in `scripts/` to build HMMs).
+External tools used at runtime come from the `bioinfo` conda environment:
+HMMER (via `pyhmmer`), Biopython, and **Prodigal** (only when the input is a raw
+nucleotide genome — install with `conda install -c bioconda prodigal`).
+BLAST/Bakta/DIAMOND/MMseqs2/Snakemake are present in the environment but are
+**not** part of the runtime pipeline (MAFFT/hmmbuild are used offline in
+`scripts/` to build HMMs).
 
 ## Usage
 
@@ -83,6 +88,10 @@ python cli.py --accession GCF_000009285.1
 
 # By local protein FASTA
 python cli.py --fasta proteins.faa --out report.json
+
+# By raw (unannotated) nucleotide genome/contigs — auto-detected, gene-called
+# with Prodigal, then screened (requires `prodigal` on PATH)
+python cli.py --fasta genome.fna
 
 # Web dashboard
 streamlit run app.py

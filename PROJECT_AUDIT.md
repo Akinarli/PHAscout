@@ -43,9 +43,22 @@ behavior change to PhaC detection; the only logic change is the PHBV caveat.
 - **`pipeline_eski/` — DONE.** Removed the 4.3 MB full-duplicate backup from the working tree
   (88 tracked files + untracked pyc); retained in git history.
 
+### Raw-assembly support (Prodigal) — DONE (2026-06-30, third pass)
+
+- New `phascout/input/gene_caller.py`: auto-detects nucleotide vs protein input
+  (alphabet fraction), runs Prodigal (`-p single`, falling back to `-p meta` for
+  <100 kb inputs), and extracts per-gene coordinates **from Prodigal's FASTA
+  headers** (`# start # end # strand`) into `gff_data` — so raw genomes get the
+  same operon/synteny analysis as annotated proteomes.
+- Wired into `pipeline.py` `fasta_file`/`fasta_text` branches (auto-detect; no new
+  flag needed). README + METHODOLOGY updated.
+- Verified end-to-end on a synthetic phaCAB nucleotide contig: nucleotide detected
+  → 3 genes called → phaC Class I functional → operon synteny (phaA 193 bp, phaB
+  1564 bp from phaC) → SCL potential. New tests `tests/test_gene_caller.py` (5).
+  Full suite: **17 passed**.
+
 ### Still outstanding (larger roadmap — not started)
 
-- **Raw-assembly support (Prodigal/Bakta)** so unannotated genomes can be screened.
 - **Single unified prediction layer** (collapse `pathway_engine` + `pha_type`).
 - **Expanded negative set** — n=2 cannot support any specificity claim.
 - **Archaeal / monomer-route HMM coverage** (Haloferax, Synechocystis abstain on phaA/phaB).
@@ -166,7 +179,7 @@ The user's specific concern is real and currently violated:
 | **NCBI Datasets (REST)** | ✅ | ✅ input (via `requests`, not the `datasets` CLI) |
 | **BLAST** | ✅ | ❌ not used by pipeline (referenced only in prose) |
 | **Bakta** | ✅ | ❌ not used (proteomes come pre-annotated from NCBI) |
-| **Prodigal** | ✅ | ❌ not used (no gene-calling from raw contigs) |
+| **Prodigal** | ✅ | ✅ integrated (raw nucleotide genome input → gene calling + coords; `gene_caller.py`) |
 | **DIAMOND / MMseqs2** | ✅ | ❌ not used in pipeline (MMseqs only in a clustering helper script) |
 | **MAFFT** | ✅ | ❌ used only offline to build HMMs (`scripts/`), not at runtime |
 | **Snakemake** | ✅ | ❌ no workflow file exists |
