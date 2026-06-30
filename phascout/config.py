@@ -168,12 +168,24 @@ PATHWAYS = {
         "product_tendency": "MCL-PHA (3HD baskın)",
     },
     "delta": {
-        "name": "Şeker + VFA Ko-substrat",
+        # ÖNEMLI: 3HV monomeri propiyonil-CoA -> 3-ketovaleril-CoA rotasini
+        # gerektirir (C5-kabul eden bir beta-ketotiyolaz, or. BktB + tek-karbon
+        # sayili VFA beslemesi). phaA+phaB (C4 asetoasetil rotasi) TEK BASINA
+        # 3HV SAGLAMAZ. PHAscout su an 3HV-onculu bir gen (bktB vb.) ARAMAZ;
+        # bu yuzden delta "P(3HB-co-3HV)" ciktisini KOSULSUZ iddia ETMEMELI.
+        # product_tendency, PHBV'yi yalnizca disaridan VFA ko-substrat + C5
+        # tiyolaz kosuluna bagli, DOGRULANMAMIS bir olasilik olarak ifade eder.
+        "name": "Şeker + VFA Ko-substrat (PHBV koşullu)",
         "required_genes": ["phaC", "phaA", "phaB"],
         "optional_genes": ["phaJ"],
         "valid_phac_classes": ["Class_I", "Class_III", "Class_IV"],
         "carbon_sources": ["glucose+propionate", "glucose+valerate"],
-        "product_tendency": "P(3HB-co-3HV)",
+        "product_tendency": (
+            "P(3HB); P(3HB-co-3HV) yalnızca dıştan tek-karbon-sayılı VFA "
+            "(propiyonat/valerat) + C5-kabul eden tiyolaz ile — 3HV-öncülü "
+            "sinyal PHAscout tarafından doğrulanmaz"
+        ),
+        "requires_3hv_precursor": True,
     },
     "epsilon": {
         # Yag asidi beta-oksidasyonundan PhaJ ((R)-spesifik enoyl-CoA hidrataz)

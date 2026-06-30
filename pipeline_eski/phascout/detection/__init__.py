@@ -1,1 +1,0 @@
-# Detection modülü başlatıcısı

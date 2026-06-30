@@ -100,12 +100,28 @@ class PathwayEngine:
 
                 note = "Yolak AKTIF."
                 confidence = "HIGH"
-                
+
                 if pathway_id == "beta":
                     phaj_present = gene_vector.get("phaJ", False)
                     confidence = "HIGH" if phaj_present else "MEDIUM"
                     if not phaj_present:
                         note += " phaJ bulunamadi — yag asidi substrat saglama kapasitesi belirsiz. Deneysel dogrulama onerilir."
+                elif pdef.get("requires_3hv_precursor"):
+                    # PHBV (3HV) over-claim'i onle: phaA+phaB TEK BASINA 3HV
+                    # SAGLAMAZ. 3HV-onculu gen (or. bktB) taranmadigindan, bu
+                    # yolak P(3HB-co-3HV)'yi DOGRULANMIS bir cikti olarak iddia
+                    # edemez; yalnizca disaridan VFA ko-substrat altinda KOSULLU
+                    # bir olasilik olarak raporlanir.
+                    confidence = "CONDITIONAL"
+                    note += (
+                        " UYARI: P(3HB-co-3HV) potansiyeli KOSULLUDUR — 3HV monomeri "
+                        "tek-karbon-sayili VFA (propiyonat/valerat) ko-substrat + C5-kabul "
+                        "eden tiyolaz gerektirir. PHAscout 3HV-onculu sinyal (or. bktB) "
+                        "ARAMAZ; phaA/phaB varligi PHBV'yi kanitlamaz. Bu organizmanin "
+                        "intrinsik cikti egilimi P(3HB)'dir."
+                    )
+                    if optional_found:
+                        note += f" Opsiyonel genler de mevcut: {', '.join(optional_found)}"
                 else:
                     if optional_found:
                         note += f" Opsiyonel genler de mevcut: {', '.join(optional_found)}"

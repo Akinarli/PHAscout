@@ -1,1 +1,0 @@
-# Scoring modülü başlatıcısı

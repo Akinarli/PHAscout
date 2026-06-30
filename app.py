@@ -30,13 +30,16 @@ def get_pipeline():
 
 def main():
     st.title("🧬 PHAscout")
-    st.subheader("Bakteriyel Polihidroksialkanoat (PHA) Üreticisi Tespit Aracı")
-    
+    st.subheader("Bakteriyel Polihidroksialkanoat (PHA) Genomik Potansiyel Tarama Aracı")
+
     st.markdown("""
-    PHAscout, genom dizilerinden (proteomlardan) yola çıkarak bir bakterinin PHA plastiği 
-    üretip üretemeyeceğini, hangi karbon kaynaklarını kullanabileceğini ve hangi yolaklara 
-    sahip olduğunu **Yapay Zeka Destekli HMM Modelleri** ve **Çift Katmanlı BLOSUM62 Filtresi** 
-    ile yüksek doğrulukla tahmin eder.
+    PHAscout, genom dizilerinden (proteomlardan) yola çıkarak bir bakterinin PHA biyosentezi
+    için **genomik potansiyelini**, hangi karbon kaynaklarını kullanabileceğini ve hangi
+    yolaklara sahip olduğunu HMM profilleri ve çift katmanlı BLOSUM62 filtresi ile tahmin eder.
+
+    > ⚠️ **Önemli:** Gen varlığı PHA *üretimini kanıtlamaz*. Sonuçlar yalnızca genomik
+    > potansiyeli gösterir; gerçek PHA birikimi gen ifadesine, karbon kaynağına ve büyüme
+    > koşullarına bağlıdır ve **deneysel doğrulama gerektirir**.
     """)
     
     st.sidebar.header("Taramayı Başlat")
@@ -87,10 +90,15 @@ def display_report(report):
     c1, c2, c3 = st.columns(3)
     
     with c1:
-        if summ.get("produces_pha"):
-            st.success("✅ PHA Üreticisi (Pozitif)")
+        pot = summ.get("pha_potential", "none")
+        conf = summ.get("potential_confidence", "yok")
+        if pot in ("SCL", "MCL", "SCL-co-MCL"):
+            st.success(f"🧬 PHA genomik potansiyeli: {pot} (güven: {conf})")
+        elif pot == "belirsiz":
+            st.warning("🧬 PHA genomik potansiyeli: BELİRSİZ\n\n(fonksiyonel PhaC var, besleme rotası tespit edilmedi)")
         else:
-            st.error("❌ PHA Üreticisi Değil (Negatif)")
+            st.info("🧬 PHA genomik potansiyeli: YOK\n\n(fonksiyonel PhaC doğrulanamadı)")
+        st.caption("Genomik potansiyel ≠ üretim kanıtı. Deneysel doğrulama gerekir.")
             
     with c2:
         phac_class = summ.get("phac_class")
