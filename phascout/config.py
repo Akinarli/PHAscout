@@ -29,11 +29,20 @@ PFAM_PROFILES = {
     "phaJ": ["PF01575"],               # MaoC_dehydratas - (R)-spesifik enoyl-CoA hidrataz (hotdog katlanim).
                                        # ESKI: PF00767 (crotonase) gercek PhaJ'in HICBIRINI yakalamiyordu;
                                        # sadece fadB/echA gibi yanlis pozitifleri getiriyordu.
-    "phaG": ["PF00561", "PF07167"],               # Acyltransferase
+    "phaG": ["PF00561"],               # 3-hidroksiaçil-ACP:CoA transasilaz (alfa/beta-hidrolaz
+                                       # katlanımı; gerçek PhaG'yi PF00561 yakalar, skor ~60-65).
+                                       # ESKI: ["PF00561", "PF07167"] -> PF07167 sentaz-spesifiktir
+                                       # (PhaC'yi skor 241 ile yakalar, gerçek PhaG'nin HICBIRINI
+                                       # yakalamaz); listede olmasi yalnizca PhaC sentazini phaG
+                                       # adayi olarak kirletiyordu. BLOSUM katmani son ayrimi yapar.
     "phaP": ["PF09361"],               # Phasin
     "phaR": ["PF07879"],               # Regulator (transkripsiyon düzenleyici)
     "phaE": ["PF09712"],               # PhaE (Class III alt birim)
-    "phaZ": ["PF05898"],               # PHA depolymerase
+    # phaZ (PHA depolimeraz) KULLANIM DISI: gen vektorunde veya siniflandirma
+    # mantiginda yer almiyor. PF05898 InterPro'dan HMM dondurmuyor (bos '{}')
+    # ve her acilista bosuna bir ag istegi yapiyordu. Depolimeraz mantigi
+    # eklendiginde gecerli bir profille ("phaZ": ["PFxxxxx"]) geri eklenebilir.
+    # "phaZ": ["PF05898"],
 }
 
 # ============================================================

@@ -139,6 +139,7 @@ class PHAscoutPipeline:
         }
 
         phac_seq = ""
+        best_phac_hit = None
         if gene_vector["phaC"]:
             phac_hits = filtered_results.get("phaC", [])
             # KRITIK: Katman 1 (genis PFAM agi) yuzlerce alpha/beta-hidrolazi
@@ -158,7 +159,6 @@ class PHAscoutPipeline:
                     return gene_vector.get("phaG") or gene_vector.get("phaJ")
                 return (gene_vector.get("phaA") and gene_vector.get("phaB")) or gene_vector.get("phaJ")
 
-            best_phac_hit = None
             best_rank = (-1, -1, -1.0)  # (is_functional, route_complete, best_score)
             n_candidates = len(phac_hits)
             for hit in phac_hits:
@@ -201,7 +201,7 @@ class PHAscoutPipeline:
             analyze_operon_evidence, RESCUE_BLOSUM_FLOOR,
         )
         gff = self.gff_data if hasattr(self, "gff_data") else {}
-        phac_pid = best_phac_hit["protein_id"] if 'best_phac_hit' in locals() and best_phac_hit else None
+        phac_pid = best_phac_hit["protein_id"] if best_phac_hit else None
         operon_result = analyze_operon_evidence(phac_pid, hmm_results, gff)
 
         # OPERON-KURTARMA: BLOSUM esigini gecememis ama secilen phaC ile SIKI
@@ -338,4 +338,5 @@ if __name__ == "__main__":
 
     # Metin raporu yazdir
     text = pipeline.reporter.to_text(report)
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     print(text)

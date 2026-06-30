@@ -59,6 +59,17 @@ def download_pfam_hmm(pfam_id: str, output_dir: str) -> str:
                 import gzip
                 data = gzip.decompress(data)
 
+            # DOGRULAMA: Gecerli bir HMMER profili "HMMER" sihirli sozcuguyle
+            # baslar. API hata durumunda JSON ('{}' gibi) veya bos govde
+            # donebilir; bunu diske YAZMA, aksi halde 2-byte bozuk dosya
+            # onbellekte kalip her acilista sessizce yuklenememe hatasi verir.
+            if not data.lstrip()[:5] == b"HMMER":
+                logger.error(
+                    f"PFAM profili gecersiz yanit dondu ({pfam_id}): "
+                    f"HMMER baslangici yok (govde: {data[:40]!r}). Kaydedilmiyor."
+                )
+                return None
+
             with open(hmm_path, "wb") as f:
                 f.write(data)
 
@@ -91,6 +102,20 @@ class HMMScanner:
 
             for pfam_id in pfam_ids:
                 hmm_path = os.path.join(PFAM_HMM_DIR, f"{pfam_id}.hmm")
+
+                # Onbellekteki dosya bozuksa (or. eski basarisiz indirmeden kalan
+                # 2-byte '{}' JSON hatasi) sil ki yeniden indirilebilsin. HMMER
+                # profilleri "HMMER" sihirli sozcuguyle baslar.
+                if os.path.exists(hmm_path):
+                    try:
+                        with open(hmm_path, "rb") as fh:
+                            if not fh.read(5).lstrip() == b"HMMER":
+                                logger.warning(
+                                    f"Bozuk HMM onbellegi siliniyor ({pfam_id}.hmm); yeniden indirilecek."
+                                )
+                                os.remove(hmm_path)
+                    except OSError:
+                        pass
 
                 # Dosya yoksa indir
                 if not os.path.exists(hmm_path):
@@ -198,6 +223,18 @@ class HMMScanner:
 
                 except Exception as e:
                     logger.error(f"HMM tarama hatasi ({gene_name}): {e}")
+
+            # DEDUPLIKASYON: Bir genin birden fazla PFAM profili olabilir
+            # (or. phaA=PF00108+PF02803). Ayni protein her profilde eslesip
+            # listeye birden cok kez girer; bu hem BLOSUM'u gereksiz tekrar
+            # calistirir hem aday sayilarini sisirir. Protein basina yalnizca
+            # en iyi (en dusuk E-value) hit'i tut.
+            best_by_pid = {}
+            for hit in results[gene_name]:
+                pid = hit["protein_id"]
+                if pid not in best_by_pid or hit["evalue"] < best_by_pid[pid]["evalue"]:
+                    best_by_pid[pid] = hit
+            results[gene_name] = list(best_by_pid.values())
 
             # En iyi hit'i en başa koy (en düşük E-value)
             results[gene_name].sort(key=lambda x: x["evalue"])
