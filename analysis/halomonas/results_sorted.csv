@@ -1,0 +1,75 @@
+accession,species,status,phac_class,phac_functional,phac_confidence,pha_potential,potential_confidence,pha_products,detected_genes,ml_probability,error,phaC,phaA,phaB,phaJ,phaG,phaP,phaR,phaE,wet
+GCF_001886615.1,Halomonas aestuarii,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_009902005.1,Halomonas alimentaria,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_034479615.1,Halomonas alkaliantarctica,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_030505695.1,Halomonas alkalicola,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaJ|phaP|phaR,100.0,,1,1,1,1,0,1,1,0,False
+GCF_021412585.1,Halomonas alkalisoli,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,99.7,,1,1,1,0,0,1,1,0,False
+GCF_030409235.1,Halomonas almeriensis,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_040196335.1,Halomonas aquatica,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_055382475.1,Halomonas beimenensis,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,99.3,,1,1,1,0,0,1,1,0,False
+GCF_008329985.2,Halomonas binhaiensis,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaG|phaP|phaR,100.0,,1,1,1,0,1,1,1,0,False
+GCF_014193375.1,Halomonas campaniensis,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_050215505.1,Halomonas casei,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_001662285.1,Halomonas caseinilytica,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaG|phaP|phaR,100.0,,1,1,1,0,1,1,1,0,False
+GCF_014192215.1,Halomonas cerina,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_001545155.1,Halomonas chromatireducens,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,99.7,,1,1,1,0,0,1,1,0,False
+GCF_014898005.1,Halomonas citrativorans,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_014897985.1,Halomonas colorata,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_900142755.1,Halomonas cupida,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_900109725.1,Halomonas daqiaonensis,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_003056305.1,Halomonas denitrificans,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,99.7,,1,1,1,0,0,1,1,0,False
+GCF_024790395.1,Halomonas dongshanensis,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_000196875.2,Halomonas elongata,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaG|phaP|phaR,100.0,,1,1,1,0,1,1,1,0,False
+GCF_031451635.1,Halomonas eurihalina,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaG|phaP|phaR,100.0,,1,1,1,0,1,1,1,0,False
+GCF_010993975.1,Halomonas faecis,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_022487945.1,Halomonas flagellata,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,99.7,,1,1,1,0,0,1,1,0,False
+GCF_014192285.1,Halomonas fontilapidosi,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_023554995.1,Halomonas gemina,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_023094245.1,Halomonas getboli,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_006540005.1,Halomonas halmophila,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_030406665.1,Halomonas halophila,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_003202165.1,Halomonas heilongjiangensis,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,99.7,,1,1,1,0,0,1,1,0,False
+GCF_013183775.1,Halomonas hibernica,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_001431725.1,Halomonas huangheensis,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,99.7,,1,1,1,0,0,1,1,0,False
+GCF_031451795.1,Halomonas icarae,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,99.7,,1,1,1,0,0,1,1,0,False
+GCF_018448785.1,Halomonas jincaotanensis,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,99.7,,1,1,1,0,0,1,1,0,False
+GCF_030010475.1,Halomonas kalidii,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,99.7,,1,1,1,0,0,1,1,0,False
+GCF_039691755.1,Halomonas kashgarensis,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_031451675.1,Halomonas koreensis,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,99.7,,1,1,1,0,0,1,1,0,False
+GCF_900116705.1,Halomonas korlensis,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,99.7,,1,1,1,0,0,1,1,0,False
+GCF_003045775.1,Halomonas litopenaei,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_023555005.1,Halomonas llamarensis,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_902500215.1,Halomonas lysinitropha,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_004347715.1,Halomonas marinisediminis,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,99.7,,1,1,1,0,0,1,1,0,False
+GCF_030409305.1,Halomonas maura,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_052496345.1,Halomonas mongoliensis,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_003966155.1,Halomonas nitroreducens,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,98.0,,1,1,1,0,0,1,1,0,False
+GCF_014192055.1,Halomonas organivorans,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_040196315.1,Halomonas pelophila,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_025917315.1,Halomonas qaidamensis,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_025820815.1,Halomonas qinghailakensis,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_030409215.1,Halomonas ramblicola,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_030012485.1,Halomonas rhizosphaerae,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_030409265.1,Halomonas sabkhae,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_032333995.1,Halomonas saccharevitans,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_012062845.1,Halomonas salinarum,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_002286975.1,Halomonas salipaludis,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_900104135.1,Halomonas shengliensis,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_000265245.1,Halomonas smyrnensis AAD6,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_010977575.1,Halomonas socia,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,99.7,,1,1,1,0,0,1,1,0,False
+GCF_003056325.1,Halomonas sp. BN3-1,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_040070555.1,Halomonas sp. H10-59,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_001039575.1,Halomonas sp. PR-M31,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_040070525.1,Halomonas sp. RT37,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_009363675.1,Halomonas sp. THAF12,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_014192275.1,Halomonas stenophila,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,99.7,,1,1,1,0,0,1,1,0,False
+GCF_042643535.1,Halomonas tibetensis,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_005780185.1,Halomonas urmiana,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_003028575.1,Halomonas urumqiensis,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCF_004363555.1,Halomonas ventosae,ok,Class_I,True,100.0,SCL,yuksek,P(3HB) ; P(3HB-co-3HV) (propiyonat/valerat ko-substratıyla),phaC|phaA|phaB|phaP|phaR,100.0,,1,1,1,0,0,1,1,0,False
+GCA_019114645.1,Candidatus Halomonas stercoripullorum,ok,,False,0.0,none,yok,,phaC|phaA,0.0,,1,1,0,0,0,0,0,0,False
+GCF_004798905.1,Halomonas borealis,ok,,False,0.0,none,yok,,phaC|phaA,0.0,,1,1,0,0,0,0,0,0,False
+GCF_055379665.1,Halomonas cibimaris,ok,,False,0.0,none,yok,,phaC|phaA,0.0,,1,1,0,0,0,0,0,0,False
+GCF_055382465.1,Halomonas garicola,ok,,False,0.0,none,yok,,phaC|phaA,0.0,,1,1,0,0,0,0,0,0,False
+GCF_031886125.1,Halomonas piscis,ok,,False,0.0,none,yok,,phaC|phaA,0.0,,1,1,0,0,0,0,0,0,False
+GCF_054654615.1,Halomonas shantousis,ok,Class_I,False,1.8,none,yok,,phaC|phaA,0.0,,1,1,0,0,0,0,0,0,False

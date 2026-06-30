@@ -1,0 +1,6 @@
+accession,label_type,citation,notes
+# Bu 74 Halomonas'tan ıslak-lab PHA verisi OLAN birkaçını buraya ekle (sen biliyorsun).
+# label_type: SCL / MCL / SCL-co-MCL  | citation: DOI veya PMID (zorunlu)
+# Bunlar accuracy iddiası DEĞİL; tahminle deneyi yan yana göstermek için 'destekleyici örnek'.
+# Örnek satır (kendine göre düzelt/sil):
+# GCF_000265245.1,SCL,PMID:XXXXXXXX,Halomonas smyrnensis AAD6 — literatürde PHB
